@@ -5,7 +5,7 @@
 .clickable {
   width: 100%;
   padding: var(--base-size-8, 0.5rem);
-  padding-left: 12px;
+  padding-left: 8px;
   border-radius: var(--borderRadius-medium, 6px);
   transition: background-color 0.2s;
   cursor: pointer;

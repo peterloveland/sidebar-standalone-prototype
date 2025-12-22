@@ -135,7 +135,7 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
     if (hasAgents && humanOnly.length === 0) {
       return (
         <span className={styles.emptyState}>
-          No human assignee
+          No user is assigned
         </span>
       );
     }
@@ -161,7 +161,7 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
                     src={userInfo.avatar} 
                     alt={assignee}
                     className={styles.assigneeAvatar}
-                    size={20}
+                    size={16}
                   />
                 ) : (
                   <div className={styles.assigneeAvatar}>
@@ -235,10 +235,10 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
     const unselectedUsers = AVAILABLE_ASSIGNEES.filter(user => !assigneesValue.includes(user.username));
     
     return (
-      <>
+      <div style={{ width: "296px" }}>
         {/* Selected items at the top */}
         {(selectedUsers.length > 0 || selectedAgents.length > 0) && (
-          <ActionList selectionVariant='multiple'>
+          <ActionList selectionVariant="multiple">
             {selectedUsers.map((user) => (
               <ActionList.Item
                 key={user.username}
@@ -248,10 +248,14 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
                 aria-checked={isAssigned(user.username)}
               >
                 <ActionList.LeadingVisual>
-                  <img 
-                    src={user.avatar} 
+                  <img
+                    src={user.avatar}
                     alt={user.username}
-                    style={{ width: '20px', height: '20px', borderRadius: '50%' }}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "50%",
+                    }}
                   />
                 </ActionList.LeadingVisual>
                 {user.username}
@@ -266,10 +270,14 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
                 onSelect={() => toggleAssignee(agent.name)}
               >
                 <ActionList.LeadingVisual>
-                  <img 
-                    src={agent.avatar} 
+                  <img
+                    src={agent.avatar}
                     alt={agent.name}
-                    style={{ width: '20px', height: '20px', borderRadius: '50%' }}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "50%",
+                    }}
                   />
                 </ActionList.LeadingVisual>
                 {agent.name}
@@ -282,10 +290,10 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
         <ActionList selectionVariant="multiple">
           <div className={styles.agentGroup}>
             <ActionList.GroupHeading as="h3">Agents</ActionList.GroupHeading>
-            <div 
+            <div
               className={styles.customAgentCTA}
               onClick={handleCreateCustomSession}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: "pointer" }}
             >
               Create new
             </div>
@@ -300,46 +308,54 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
                 onSelect={() => toggleAssignee(agent.name)}
               >
                 <ActionList.LeadingVisual>
-                  <img 
-                    src={agent.avatar} 
+                  <img
+                    src={agent.avatar}
                     alt={agent.name}
-                    style={{ width: '20px', height: '20px', borderRadius: '50%' }}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "50%",
+                    }}
                   />
                 </ActionList.LeadingVisual>
                 {agent.name}
               </ActionList.Item>
             ))
           ) : (
-            <div 
-              style={{ padding: '0.5rem 0.75rem', fontSize: '0.875rem', color: 'var(--fgColor-muted, #656d76)', cursor: 'pointer' }}
+            <div
+              style={{
+                padding: "0.5rem 0.75rem",
+                fontSize: "0.875rem",
+                color: "var(--fgColor-muted, #656d76)",
+                cursor: "pointer",
+              }}
               onClick={handleCreateCustomSession}
             >
               All agents already assigned. Create a new custom session
             </div>
           )}
 
-
-            <ActionList.GroupHeading as="h3">Users</ActionList.GroupHeading>
-            {unselectedUsers.map((user) => (
-              <ActionList.Item
+          <ActionList.GroupHeading as="h3">Users</ActionList.GroupHeading>
+          {unselectedUsers.map((user) => (
+            <ActionList.Item
               key={user.username}
               onSelect={() => toggleAssignee(user.username)}
               role="menuitemradio"
-                selected={isAssigned(user.username)}
-                aria-checked={isAssigned(user.username)}
-              >
-                <ActionList.LeadingVisual>
-                  <img 
-                    src={user.avatar} 
-                    alt={user.username}
-                    style={{ width: '20px', height: '20px', borderRadius: '50%' }}
-                  />
-                </ActionList.LeadingVisual>
-                {user.username}
-              </ActionList.Item>
-            ))}
-          </ActionList>
-      </>
+              selected={isAssigned(user.username)}
+              aria-checked={isAssigned(user.username)}
+            >
+              <ActionList.LeadingVisual>
+                <img
+                  src={user.avatar}
+                  alt={user.username}
+                  style={{ width: "20px", height: "20px", borderRadius: "50%" }}
+                />
+              </ActionList.LeadingVisual>
+              {user.username}
+            </ActionList.Item>
+          ))}
+        </ActionList>
+      </div>
     );
   };
 

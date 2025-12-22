@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 32px;
-  padding-left: 12px;
+  padding-left: 8px;
   padding-right: 8px;
   border-radius: 6px;
   border-radius: var(--borderRadius-medium, 6px);

@@ -69,10 +69,9 @@
   align-items: center;
   border: var(--borderWidth-thin, 1px) solid var(--borderColor-muted, #d0d7de);
   border-radius: var(--borderRadius-full, 9999px);
-  padding-left: var(--base-size-2, 0.125rem);
+  padding-left: 3px;
   padding-right: var(--base-size-10, 0.625rem);
-  padding-top: var(--base-size-2, 0.125rem);
-  padding-bottom: var(--base-size-2, 0.125rem);
+  height: 24px;
   &:hover {
     background-color: var(--control-bgColor-hover, #f6f8fa);
   }
@@ -97,13 +96,14 @@
 }
 
 .assigneeAvatar {
-  margin-right: 0.5rem;
+  margin-right: var(--base-size-6, 6px);
   border-radius: var(--borderRadius-full, 50%);
   background-color: var(--bgColor-neutral-emphasis, #6e7781);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .assigneeAvatarIcon {

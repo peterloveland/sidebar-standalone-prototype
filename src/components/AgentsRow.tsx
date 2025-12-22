@@ -93,7 +93,7 @@ export function AgentsRow({ issueId }: AgentsRowProps) {
             flex: 1,
             display: "flex",
             alignItems: "center",
-            gap: "var(--base-size-8, 0.5rem)",
+            gap: "var(--base-size-6, 0.25rem)",
             cursor: "pointer",
             borderRadius: "var(--borderRadius-medium, 6px)",
             transition: "background-color 0.2s",
@@ -122,6 +122,7 @@ export function AgentsRow({ issueId }: AgentsRowProps) {
             style={{
               fontSize: "var(--text-body-size-small, 0.875rem)",
               flex: 1,
+              fontWeight: 'var(--base-text-weight-medium, 500)',
             }}
           >
             {agentsValue.length} agent session

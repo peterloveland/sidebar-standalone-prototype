@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { useState, useRef, ReactNode } from 'react';
+import { AnchoredOverlay } from '@primer/react';
 import styles from './SidebarRow.module.css';
 import { SidebarLabel } from './SidebarLabel';
 
@@ -31,9 +31,6 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
   disableClickToEdit = false,
 }: SidebarRowProps<T>) {
   const [isEditing, setIsEditing] = useState(false);
-  const rowRef = useRef<HTMLDivElement>(null);
-  const clickableRef = useRef<HTMLDivElement>(null);
-  const [portalPosition, setPortalPosition] = useState({ top: 0, left: 0, width: 0 });
 
   const handleEditingChange = (editing: boolean) => {
     setIsEditing(editing);
@@ -47,72 +44,37 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
     return true;
   })();
 
-  useEffect(() => {
-    if (isEditing && clickableRef.current) {
-      const updatePosition = () => {
-        if (clickableRef.current) {
-          const rect = clickableRef.current.getBoundingClientRect();
-          setPortalPosition({
-            top: rect.top + 8,
-            left: rect.left,
-            width: rect.width,
-          });
-        }
-      };
-
-      updatePosition();
-      window.addEventListener('scroll', updatePosition);
-      window.addEventListener('resize', updatePosition);
-
-      return () => {
-        window.removeEventListener('scroll', updatePosition);
-        window.removeEventListener('resize', updatePosition);
-      };
-    }
-  }, [isEditing, value]);
-
   return (
-    <>
-      <div ref={rowRef} className={styles.container}>
-        <SidebarLabel 
-          trailingVisual={trailingVisual}
-          onClick={() => !isEditing && handleEditingChange(true)}
-          isActive={isEditing}
-        >
-          {label}
-        </SidebarLabel>
-        <div
-          ref={clickableRef}
-          onClick={() => !disableClickToEdit && !isEditing && handleEditingChange(true)}
-          className={`${styles.clickable}`}
-          style={{ cursor: 'default' }}
-        >
-          {renderDisplay(value)}
-        </div>
-        {footer && <div className={styles.footer}>{footer}</div>}
-      </div>
-
-      {isEditing &&
-        createPortal(
-          <>
-            <div
-              className={styles.backdrop}
-              onClick={() => handleEditingChange(false)}
-            />
-            <div
-              className={styles.portal}
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                top: `${portalPosition.top}px`,
-                left: `${portalPosition.left}px`,
-                width: `${portalPosition.width}px`,
-              }}
-            >
-              {renderEditor(value, onChange)}
-            </div>
-          </>,
-          document.body
+    <div className={styles.container}>
+      <AnchoredOverlay
+        open={isEditing}
+        onOpen={() => handleEditingChange(true)}
+        onClose={() => handleEditingChange(false)}
+        renderAnchor={(anchorProps) => (
+          <SidebarLabel
+            {...anchorProps}
+            trailingVisual={trailingVisual}
+            onClick={() => !isEditing && handleEditingChange(true)}
+            isActive={isEditing}
+          >
+            {label}
+          </SidebarLabel>
         )}
-    </>
+        side="outside-bottom"
+        align="start"
+      >
+          {renderEditor(value, onChange)}
+      </AnchoredOverlay>
+      <div
+        onClick={() =>
+          !disableClickToEdit && !isEditing && handleEditingChange(true)
+        }
+        className={`${styles.clickable}`}
+        style={{ cursor: "default" }}
+      >
+        {renderDisplay(value)}
+      </div>
+      {footer && <div className={styles.footer}>{footer}</div>}
+    </div>
   );
 }
