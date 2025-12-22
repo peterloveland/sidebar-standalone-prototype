@@ -1,0 +1,396 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+}
+
+.notFound {
+  font-size: var(--text-body-size-small, 0.875rem);
+  color: var(--fgColor-muted, #656d76);
+}
+
+.quickActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--base-size-6, 0.375rem);
+  margin-bottom: var(--base-size-8, 0.5rem);
+}
+
+.quickActionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--base-size-6, 0.375rem);
+  padding-block: 2px;
+  padding-inline: 12px;
+  border-radius: var(--borderRadius-full, 99px);
+  border: var(--borderWidth-thin, 1px) dashed var(--borderColor-default, #d0d7de);
+  background: transparent;
+  font-size: var(--text-body-size-small, 0.75rem);
+  font-weight: var(--base-text-weight-medium, 500);
+  color: var(--fgColor-muted, #656d76);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.quickActionButton:hover {
+  border-color: var(--borderColor-emphasis, #858f99);
+  background-color: var(--bgColor-muted, #f6f8fa);
+}
+
+.quickActionAvatar {
+  width: var(--base-size-16, 1rem);
+  height: var(--base-size-16, 1rem);
+  border-radius: var(--borderRadius-full, 50%);
+  background-color: var(--bgColor-neutral-muted, #afb8c1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quickActionAvatarIcon {
+  height: 10px;
+  width: 10px;
+  color: var(--fgColor-default, #24292f);
+}
+
+.assigneesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--base-size-4, 0.25rem);
+}
+
+.assigneeChip {
+  position: relative;
+}
+
+.assigneeChipInner {
+  display: flex;
+  align-items: center;
+  border: var(--borderWidth-thin, 1px) solid var(--borderColor-muted, #d0d7de);
+  border-radius: var(--borderRadius-full, 9999px);
+  padding-left: var(--base-size-2, 0.125rem);
+  padding-right: var(--base-size-10, 0.625rem);
+  padding-top: var(--base-size-2, 0.125rem);
+  padding-bottom: var(--base-size-2, 0.125rem);
+  &:hover {
+    background-color: var(--control-bgColor-hover, #f6f8fa);
+  }
+}
+
+.chipRemoveButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-left: var(--base-size-4, 0.25rem);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--fgColor-muted, #656d76);
+  border-radius: var(--borderRadius-small, 3px);
+  transition: color 0.2s;
+}
+
+.chipRemoveButton:hover {
+  color: var(--fgColor-danger, #cf222e);
+}
+
+.assigneeAvatar {
+  margin-right: 0.5rem;
+  border-radius: var(--borderRadius-full, 50%);
+  background-color: var(--bgColor-neutral-emphasis, #6e7781);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.assigneeAvatarIcon {
+  height: var(--base-size-16, 0.75rem);
+  width: var(--base-size-16, 0.75rem);
+  color: var(--fgColor-onEmphasis, #ffffff);
+}
+
+.assigneeName {
+  font-size: var(--text-body-size-small, 0.75rem);
+  color: var(--fgColor-default, #24292f);
+  font-weight: var(--base-text-weight-medium, 500);
+}
+
+
+.agentsRowContainer {
+  display: flex;
+  padding-left: var(--base-size-16, 1rem);
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.agentConnector {
+  width: var(--base-size-16, 1rem);
+  height: var(--base-size-16, 1rem);
+  border-left: var(--borderWidth-thin, 1px) solid var(--borderColor-muted, #d0d7de);
+  border-bottom: var(--borderWidth-thin, 1px) solid var(--borderColor-muted, #d0d7de);
+  border-bottom-left-radius: var(--borderRadius-medium, 6px);
+  margin-top: var(--base-size-4, 0.25rem);
+  flex-shrink: 0;
+}
+
+.animateStroke {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: drawStroke 0.3s ease-out forwards;
+}
+
+@keyframes drawStroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.agentContentSlide {
+  animation: slideIn 0.5s ease-out 0.25s forwards;
+  transform: translateX(-6px);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+@keyframes slideIn {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.spinAnimation {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.agentConnectorAnimate {
+  animation: drawConnector 0.6s ease-out;
+}
+
+@keyframes drawConnector {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.agentItem {
+  display: flex;
+  align-items: center;
+  gap: var(--base-size-6, 0.375rem);
+  border: var(--borderWidth-thin, 1px) solid var(--borderColor-muted, #d0d7de);
+  border-radius: var(--borderRadius-full, 9999px);
+  padding-left: var(--base-size-8, 0.5rem);
+  padding-right: var(--base-size-10, 0.625rem);
+  padding-top: var(--base-size-4, 0.25rem);
+  padding-bottom: var(--base-size-4, 0.25rem);
+  background-color: var(--bgColor-default, #ffffff);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.agentItem:hover {
+  background-color: var(--bgColor-muted, #f6f8fa);
+}
+
+.agentItemInner {
+  display: flex;
+  align-items: center;
+  gap: var(--base-size-6, 0.375rem);
+}
+
+.agentName {
+  font-size: var(--text-body-size-small, 0.75rem);
+  color: var(--fgColor-default, #24292f);
+  font-weight: var(--base-text-weight-medium, 500);
+}
+
+.agentCount {
+  min-width: var(--base-size-20, 1.25rem);
+  height: var(--base-size-20, 1.25rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--base-size-6, 0.375rem);
+  border-radius: var(--borderRadius-full, 9999px);
+  background-color: var(--bgColor-attention-muted, #fff8c5);
+  color: var(--fgColor-default, #24292f);
+  font-size: var(--text-body-size-small, 0.75rem);
+  font-weight: var(--base-text-weight-semibold, 600);
+  flex-shrink: 0;
+}
+
+.hoverBackdrop {
+  position: fixed;
+  inset: 0;
+  pointer-events: auto;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: default;
+}
+
+.hoverCard {
+  position: fixed;
+  margin-top: var(--base-size-4, 0.25rem);
+  z-index: 1001;
+  width: 224px;
+  background-color: var(--bgColor-default, #ffffff);
+  border: var(--borderWidth-thin, 1px) solid var(--borderColor-default, #d0d7de);
+  border-radius: var(--borderRadius-large, 12px);
+  box-shadow: var(--shadow-floating-large, 0 12px 28px rgba(0, 0, 0, 0.15));
+  padding: var(--base-size-12, 0.75rem);
+}
+
+.hoverCardHeader {
+  display: flex;
+  align-items: start;
+  gap: var(--base-size-8, 0.5rem);
+  margin-bottom: var(--base-size-12, 0.75rem);
+}
+
+.hoverCardAvatar {
+  width: var(--base-size-40, 2.5rem);
+  height: var(--base-size-40, 2.5rem);
+  border-radius: var(--borderRadius-full, 50%);
+  background-color: var(--bgColor-neutral-muted, #afb8c1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hoverCardAvatarIcon {
+  height: var(--base-size-20, 1.25rem);
+  width: var(--base-size-20, 1.25rem);
+  color: var(--fgColor-default, #24292f);
+}
+
+.hoverCardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.hoverCardName {
+  font-weight: var(--base-text-weight-semibold, 600);
+  font-size: var(--text-body-size-small, 0.875rem);
+  color: var(--fgColor-default, #24292f);
+}
+
+.hoverCardRole {
+  font-size: var(--text-body-size-small, 0.75rem);
+  color: var(--fgColor-muted, #656d76);
+}
+
+.removeButton {
+  width: 100%;
+  padding: var(--base-size-6, 0.375rem) var(--base-size-12, 0.75rem);
+  font-size: var(--text-body-size-small, 0.875rem);
+  color: var(--fgColor-danger, #cf222e);
+  background: var(--bgColor-default, #ffffff);
+  border: var(--borderWidth-thin, 1px) solid var(--borderColor-danger-emphasis, #cf222e);
+  border-radius: var(--borderRadius-medium, 6px);
+  transition: all 0.2s;
+  font-weight: var(--base-text-weight-medium, 500);
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  background-color: var(--bgColor-danger-muted, #ffebe9);
+}
+
+.emptyState {
+  color: var(--fgColor-muted, #656d76);
+  font-size: var(--text-body-size-small, 0.875rem);
+}
+
+.dropdownInner {
+  padding: var(--base-size-4, 0.25rem) 0;
+  background-color: var(--bgColor-muted);
+}
+
+.editorAssignedSection {
+  padding: var(--base-size-8, 0.5rem);
+  border-bottom: var(--borderWidth-thin, 1px) solid var(--borderColor-default, #d0d7de);
+}
+
+.dropdownItem {
+  width: 100%;
+  padding: var(--base-size-8, 0.5rem) var(--base-size-12, 0.75rem);
+  text-align: left;
+  font-size: var(--text-body-size-small, 0.875rem);
+  display: flex;
+  align-items: center;
+  gap: var(--base-size-8, 0.5rem);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdownItem:hover {
+  background-color: var(--bgColor-muted, #f6f8fa);
+}
+
+.dropdownItemSelected {
+  background-color: var(--bgColor-accent-muted, #ddf4ff);
+}
+
+.dropdownAvatar {
+  width: var(--base-size-24, 1.5rem);
+  height: var(--base-size-24, 1.5rem);
+  border-radius: var(--borderRadius-full, 50%);
+  background-color: var(--bgColor-neutral-muted, #afb8c1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdownAvatarIcon {
+  height: var(--base-size-12, 0.75rem);
+  width: var(--base-size-12, 0.75rem);
+  color: var(--fgColor-default, #24292f);
+}
+
+.dropdownName {
+  flex: 1;
+}
+
+.checkmark {
+  width: var(--base-size-16, 1rem);
+  height: var(--base-size-16, 1rem);
+  border-radius: var(--borderRadius-small, 3px);
+  background-color: var(--bgColor-accent-emphasis, #0969da);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkmarkIcon {
+  color: var(--fgColor-onEmphasis, #ffffff);
+  font-size: var(--text-body-size-small, 0.75rem);
+}
+
+.agentGroup {
+    position: relative;
+}
+
+.customAgentCTA {
+    position: absolute;
+    top: 0;
+    right: 0
+}

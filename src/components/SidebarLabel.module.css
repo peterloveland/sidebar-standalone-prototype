@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  padding-left: 12px;
+  padding-right: 8px;
+  border-radius: 6px;
+  border-radius: var(--borderRadius-medium, 6px);
+  transition: background-color 0.2s;
+}
+
+.plusIcon {
+  color: var(--fgColor-muted);
+}
+
+.container:hover {
+  background-color: var(--control-bgColor-hover, #f6f8fa);
+}
+
+.containerActive {
+  background-color: var(--control-bgColor-active, #f6f8fa);
+}
+
+.label {
+color: var(--fgColor-muted);
+
+/* Body/Medium Bold */
+font-family: var(--fontStack-sansSerif, "SF Pro Text");
+font-size: var(--text-body-size-medium, 14px);
+font-style: normal;
+font-weight: var(--base-text-weight-semibold, 600);
+line-height: var(--text-body-lineHeight-medium, 20px); /* 142.857% */
+}
+
+.trailing {
+  display: flex;
+  align-items: center;
+  margin-left: var(--base-size-8, 0.5rem);
+}

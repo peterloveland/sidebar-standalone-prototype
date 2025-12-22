@@ -1,0 +1,130 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  border-bottom: var(--borderWidth-thin, 1px) solid var(--borderColor-default, #d0d7de);
+}
+
+.headerContent {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.headerLeft {
+  flex: 1;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: var(--base-size-8, 0.5rem);
+  margin-bottom: var(--base-size-8, 0.5rem);
+}
+
+.iconOpen {
+  height: var(--base-size-20, 1.25rem);
+  width: var(--base-size-20, 1.25rem);
+  color: var(--fgColor-success, #1a7f37);
+}
+
+.iconClosed {
+  height: var(--base-size-20, 1.25rem);
+  width: var(--base-size-20, 1.25rem);
+  color: var(--fgColor-done, #8250df);
+}
+
+.issueNumber {
+  font-size: var(--text-body-size-small, 0.875rem);
+  color: var(--fgColor-muted, #656d76);
+}
+
+.title {
+  font-size: var(--text-title-size-medium, 1.25rem);
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  width: 1200px;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  padding: var(--base-size-24, 1.5rem);
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--base-size-24, 1.5rem);
+}
+
+.section h3 {
+  font-weight: var(--base-text-weight-semibold, 600);
+  margin-bottom: var(--base-size-8, 0.5rem);
+}
+
+.description {
+  color: var(--fgColor-default, #24292f);
+  white-space: pre-wrap;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--base-size-16, 1rem);
+}
+
+.metaLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--base-size-8, 0.5rem);
+  font-size: var(--text-body-size-small, 0.875rem);
+  color: var(--fgColor-muted, #656d76);
+  margin-bottom: var(--base-size-4, 0.25rem);
+}
+
+.metaLabel svg {
+  height: var(--base-size-16, 1rem);
+  width: var(--base-size-16, 1rem);
+}
+
+.metaValue {
+  font-size: var(--text-body-size-small, 0.875rem);
+  font-weight: var(--base-text-weight-medium, 500);
+}
+
+.timeline {
+  font-size: var(--text-body-size-small, 0.875rem);
+}
+
+.timeline p {
+  margin-bottom: var(--base-size-4, 0.25rem);
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--base-size-8, 0.5rem);
+}
+
+.actions {
+  padding-top: var(--base-size-16, 1rem);
+  border-top: var(--borderWidth-thin, 1px) solid var(--borderColor-default, #d0d7de);
+}
+
+.toggleButton {
+  width: 100%;
+}
+
+.sidebar {
+  width: 296px;
+  overflow: auto;
+  background-color: var(--bgColor-default, #f6f8fa);
+}

@@ -1,0 +1,40 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--borderRadius-full, 9999px);
+  border: var(--borderWidth-thin, 1px) solid;
+  padding: var(--base-size-2, 0.125rem) var(--base-size-10, 0.625rem);
+  font-size: var(--text-body-size-small, 0.75rem);
+  font-weight: var(--base-text-weight-semibold, 600);
+  transition: all 0.2s;
+}
+
+.badge:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--fgColor-default, #24292f), 0 0 0 4px var(--bgColor-default, #ffffff);
+}
+
+.default {
+  border-color: transparent;
+  background-color: var(--bgColor-neutral-emphasis, #6e7781);
+  color: var(--fgColor-onEmphasis, #ffffff);
+}
+
+.default:hover {
+  background-color: var(--bgColor-emphasis, #1f2328);
+}
+
+.secondary {
+  border-color: transparent;
+  background-color: var(--bgColor-neutral-muted, #afb8c1);
+  color: var(--fgColor-default, #24292f);
+}
+
+.secondary:hover {
+  background-color: var(--bgColor-neutral-emphasis, #6e7781);
+}
+
+.outline {
+  border-color: var(--borderColor-default, #d0d7de);
+  color: var(--fgColor-default, #24292f);
+}
