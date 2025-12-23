@@ -29,20 +29,21 @@ export function IssueFieldRow<T = any>({
   const [isEditing, setIsEditing] = useState(false);
   const { lockHeight, animateToAuto, getContainerProps } = useHeightAnimation();
 
-  const handleOpenEdit = () => {
-    if (!isEditing) {
+  const handleEditingChange = (editing: boolean) => {
+    if (editing && !isEditing) {
+      // Lock height when entering edit mode
       lockHeight();
-      setIsEditing(true);
-      onEditingChange?.(true);
+    } else if (!editing && isEditing) {
+      // Lock height when exiting edit mode
+      lockHeight();
       setTimeout(() => animateToAuto(), 100);
     }
+    setIsEditing(editing);
+    onEditingChange?.(editing);
   };
 
   const handleClose = () => {
-    lockHeight();
-    setIsEditing(false);
-    onEditingChange?.(false);
-    setTimeout(() => animateToAuto(), 100);
+    handleEditingChange(false);
   };
 
   const containerProps = getContainerProps();
@@ -50,7 +51,11 @@ export function IssueFieldRow<T = any>({
   const anchorContent = (
     <button
       className={`${styles.container} ${isEditing ? styles.containerActive : ''} ${className || ''} ${isColorAnimating ? styles.containerColored : ''}`}
-      onClick={handleOpenEdit}
+      onClick={() => {
+        if (!isEditing) {
+          handleEditingChange(true);
+        }
+      }}
     >
       <div className={styles.label}>{label}</div>
       <div className={styles.value}>{renderDisplay(value)}</div>
@@ -61,25 +66,26 @@ export function IssueFieldRow<T = any>({
     <AnchoredOverlay
       open={isEditing}
       onOpen={() => {
-        setIsEditing(true);
-        onEditingChange?.(true);
+        handleEditingChange(true);
       }}
-      onClose={handleClose}
+      onClose={() => {
+        handleClose();
+      }}
       renderAnchor={(anchorProps) => (
-        <div 
-          {...anchorProps} 
-          {...containerProps}
-          className={containerProps.className}
-          style={{ ...containerProps.style, overflow: 'hidden' }}
-        >
-          {description && !isEditing ? (
-            <Tooltip text={description} delay="long">
-              {anchorContent}
-            </Tooltip>
-          ) : (
-            anchorContent
-          )}
-        </div>
+          <div 
+            {...containerProps}
+            {...anchorProps}
+            className={`${containerProps.className} ${anchorProps.className || ''}`}
+            style={{ ...containerProps.style, ...anchorProps.style, overflow: 'hidden' }}
+          >
+            {description && !isEditing ? (
+              <Tooltip text={description} delay="long">
+                {anchorContent}
+              </Tooltip>
+            ) : (
+              anchorContent
+            )}
+          </div>
       )}
       side="outside-bottom"
       align="start"

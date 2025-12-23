@@ -34,7 +34,7 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
   const [isEditing, setIsEditing] = useState(false);
   const [valueChangedWhileEditing, setValueChangedWhileEditing] = useState(false);
   const prevValueRef = useRef<T>(value);
-  const { lockHeight, animateToAuto, getContainerProps } = useHeightAnimation();
+  const { lockHeight, animateToAuto, getContainerProps } = useHeightAnimation(300);
 
   const handleEditingChange = (editing: boolean) => {
     if (editing && !isEditing) {
