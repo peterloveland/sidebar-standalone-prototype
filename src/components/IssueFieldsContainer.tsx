@@ -30,53 +30,54 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
   return (
     <div>
       <SidebarLabel showPlusIcon={false}>Fields</SidebarLabel>
-      
+
       <IssueField_text
         label="DRI"
-        value={issue.fields?.dri || ''}
-        onChange={(value) => updateField('dri', value)}
+        value={issue.fields?.dri || ""}
+        onChange={(value) => updateField("dri", value)}
         // forceEdit={true}
       />
-      
+
       <IssueField_singleSelect
         label="Priority"
         value={issue.fields?.priority || null}
         options={[
-          { label: 'P0', value: 'P0' },
-          { label: 'P1', value: 'P1' },
-          { label: 'P2', value: 'P2' },
-          { label: 'P3', value: 'P3' },
+          { label: "P0", value: "P0" },
+          { label: "P1", value: "P1" },
+          { label: "P2", value: "P2" },
+          { label: "P3", value: "P3" },
         ]}
-        onChange={(value) => updateField('priority', value)}
+        onChange={(value) => updateField("priority", value)}
       />
-      
+
       <IssueField_date
         label="Start date"
         value={issue.fields?.startDate || null}
-        onChange={(value) => updateField('startDate', value)}
+        onChange={(value) => updateField("startDate", value)}
+        
       />
-      
+
       <IssueField_date
         label="Target date"
         value={issue.fields?.targetDate || null}
-        onChange={(value) => updateField('targetDate', value)}
+        onChange={(value) => updateField("targetDate", value)}
       />
-      
+
       <IssueField_singleSelect
         label="Trending"
         value={issue.fields?.trending || null}
         options={[
-          { label: 'On track', value: 'on-track' },
-          { label: 'At risk', value: 'at-risk' },
-          { label: 'Off track', value: 'off-track' },
+          { label: "On track", value: "on-track" },
+          { label: "At risk", value: "at-risk" },
+          { label: "Off track", value: "off-track" },
         ]}
-        onChange={(value) => updateField('trending', value)}
+        onChange={(value) => updateField("trending", value)}
       />
-      
+
       <IssueField_number
         label="Engineering staffing"
         value={issue.fields?.engineeringStaffing ?? null}
-        onChange={(value) => updateField('engineeringStaffing', value)}
+        onChange={(value) => updateField("engineeringStaffing", value)}
       />
     </div>
   );

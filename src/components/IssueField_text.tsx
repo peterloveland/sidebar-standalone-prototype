@@ -9,6 +9,8 @@ interface IssueField_textProps {
   forceEdit?: boolean;
 }
 
+const OFFSET_HEIGHT = 2
+
 export function IssueField_text({ label, value, onChange, forceEdit = false }: IssueField_textProps) {
   const [isEditing, setIsEditing] = useState(forceEdit);
   const [localValue, setLocalValue] = useState(value);
@@ -27,8 +29,11 @@ export function IssueField_text({ label, value, onChange, forceEdit = false }: I
   useEffect(() => {
     if (isEditing && textareaRef.current) {
       textareaRef.current.focus();
+      const length = textareaRef.current.value.length;
+      textareaRef.current.setSelectionRange(length, length);
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + 2.5 + 'px';
+      textareaRef.current.style.height =
+        textareaRef.current.scrollHeight + OFFSET_HEIGHT + "px";
     }
   }, [isEditing]);
 
@@ -71,7 +76,8 @@ export function IssueField_text({ label, value, onChange, forceEdit = false }: I
             onChange={(e) => {
               setLocalValue(e.target.value);
               e.target.style.height = 'auto';
-              e.target.style.height = e.target.scrollHeight + 2.5 + 'px';
+              e.target.style.height =
+                e.target.scrollHeight + OFFSET_HEIGHT + "px";
             }}
             onBlur={handleSave}
             onKeyDown={handleKeyDown}

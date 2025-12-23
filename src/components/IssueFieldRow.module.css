@@ -45,7 +45,7 @@
   font-family: var(--fontStack-sansSerif, "SF Pro Text");
   font-size: var(--text-body-size-small, 12px);
   font-weight: var(--base-text-weight-normal, 400);
-  line-height: var(--text-body-lineHeight-medium, 20px);
+  line-height: 18px;
   text-align: left;
   word-wrap: break-word;
   overflow-wrap: break-word;
