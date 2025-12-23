@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Tooltip } from '@primer/react';
 import styles from './IssueFieldRow.module.css';
 import fieldStyles from './IssueField.module.css';
 
@@ -6,9 +7,10 @@ interface IssueField_numberProps {
   label: string;
   value: number | null;
   onChange: (value: number | null) => void;
+  description?: string;
 }
 
-export function IssueField_number({ label, value, onChange }: IssueField_numberProps) {
+export function IssueField_number({ label, value, onChange, description }: IssueField_numberProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value?.toString() || '');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -70,8 +72,8 @@ export function IssueField_number({ label, value, onChange }: IssueField_numberP
     );
   }
 
-  return (
-    <div
+  const content = (
+    <button
       className={styles.container}
       onClick={() => setIsEditing(true)}
     >
@@ -79,6 +81,16 @@ export function IssueField_number({ label, value, onChange }: IssueField_numberP
       <div className={styles.value}>
         {value !== null ? value : <span className={fieldStyles.emptyState}>None</span>}
       </div>
-    </div>
+    </button>
   );
+
+  if (description) {
+    return (
+      <Tooltip text={description} delay="long">
+        {content}
+      </Tooltip>
+    );
+  }
+
+  return content;
 }

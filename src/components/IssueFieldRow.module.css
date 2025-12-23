@@ -7,6 +7,10 @@
   transition: background-color 0.2s;
   cursor: pointer;
   gap: var(--base-size-24, 1.5rem);
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
 }
 
 .container:hover {
@@ -44,7 +48,7 @@
   width: 30%;
   padding-top: 8px;
   padding-bottom: 8px;
-
+  text-align: left;
 }
 
 .value {

@@ -17,9 +17,10 @@ interface IssueField_singleSelectProps {
   value: string | null;
   options: SelectOption[];
   onChange: (value: string | null) => void;
+  description?: string;
 }
 
-export function IssueField_singleSelect({ label, value, options, onChange }: IssueField_singleSelectProps) {
+export function IssueField_singleSelect({ label, value, options, onChange, description }: IssueField_singleSelectProps) {
   const [localValue, setLocalValue] = useState(value);
 
   const renderDisplay = (val: string | null) => {
@@ -72,6 +73,7 @@ export function IssueField_singleSelect({ label, value, options, onChange }: Iss
       renderEditor={renderEditor}
       onChange={onChange}
       className={rowStyles.containerSelect}
+      description={description}
     />
   );
 }

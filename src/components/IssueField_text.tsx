@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './IssueFieldRow.module.css';
 import fieldStyles from './IssueField.module.css';
+import { Tooltip } from '@primer/react';
 
 interface IssueField_textProps {
   label: string;
@@ -11,7 +12,7 @@ interface IssueField_textProps {
 
 const OFFSET_HEIGHT = 2
 
-export function IssueField_text({ label, value, onChange, forceEdit = false }: IssueField_textProps) {
+export function IssueField_text({ label, value, onChange, forceEdit = false, description }: IssueField_textProps) {
   const [isEditing, setIsEditing] = useState(forceEdit);
   const [localValue, setLocalValue] = useState(value);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -88,8 +89,8 @@ export function IssueField_text({ label, value, onChange, forceEdit = false }: I
     );
   }
 
-  return (
-    <div
+  const content = (
+    <button
       className={styles.container}
       onClick={() => setIsEditing(true)}
     >
@@ -97,6 +98,16 @@ export function IssueField_text({ label, value, onChange, forceEdit = false }: I
       <div className={styles.value}>
         {value || <span className={fieldStyles.emptyState}>None</span>}
       </div>
-    </div>
+    </button>
   );
+
+  if (description) {
+    return (
+      <Tooltip text={description} delay="long">
+        {content}
+      </Tooltip>
+    );
+  }
+
+  return content;
 }

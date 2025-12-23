@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Tooltip } from '@primer/react';
 import styles from './IssueFieldRow.module.css';
 import fieldStyles from './IssueField.module.css';
 
@@ -6,9 +7,10 @@ interface IssueField_dateProps {
   label: string;
   value: string | null; // ISO date string
   onChange: (value: string | null) => void;
+  description?: string;
 }
 
-export function IssueField_date({ label, value, onChange }: IssueField_dateProps) {
+export function IssueField_date({ label, value, onChange, description }: IssueField_dateProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value || '');
   const inputRef = useRef<HTMLInputElement>(null);

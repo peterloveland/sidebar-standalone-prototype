@@ -17,9 +17,10 @@ interface IssueField_multiSelectProps {
   value: string[];
   options: SelectOption[];
   onChange: (value: string[]) => void;
+  description?: string;
 }
 
-export function IssueField_multiSelect({ label, value, options, onChange }: IssueField_multiSelectProps) {
+export function IssueField_multiSelect({ label, value, options, onChange, description }: IssueField_multiSelectProps) {
   const [localValue, setLocalValue] = useState(value);
 
   const renderDisplay = (val: string[]) => {
@@ -82,6 +83,7 @@ export function IssueField_multiSelect({ label, value, options, onChange }: Issu
       renderEditor={renderEditor}
       onChange={onChange}
       className={rowStyles.containerSelect}
+      description={description}
     />
   );
 }

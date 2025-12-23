@@ -1,5 +1,5 @@
 import { useState, ReactNode } from 'react';
-import { AnchoredOverlay } from '@primer/react';
+import { AnchoredOverlay, Tooltip } from '@primer/react';
 import styles from './IssueFieldRow.module.css';
 
 interface IssueFieldRowProps<T = any> {
@@ -9,6 +9,7 @@ interface IssueFieldRowProps<T = any> {
   renderEditor: (value: T, onChange: (newValue: T) => void, onClose: () => void) => ReactNode;
   onChange: (value: T) => void;
   className?: string;
+  description?: string;
 }
 
 export function IssueFieldRow<T = any>({
@@ -18,8 +19,19 @@ export function IssueFieldRow<T = any>({
   renderEditor,
   onChange,
   className,
+  description,
 }: IssueFieldRowProps<T>) {
   const [isEditing, setIsEditing] = useState(false);
+
+  const anchorContent = (
+    <button
+      className={`${styles.container} ${isEditing ? styles.containerActive : ''} ${className || ''}`}
+      onClick={() => !isEditing && setIsEditing(true)}
+    >
+      <div className={styles.label}>{label}</div>
+      <div className={styles.value}>{renderDisplay(value)}</div>
+    </button>
+  );
 
   return (
     <AnchoredOverlay
@@ -27,13 +39,14 @@ export function IssueFieldRow<T = any>({
       onOpen={() => setIsEditing(true)}
       onClose={() => setIsEditing(false)}
       renderAnchor={(anchorProps) => (
-        <div
-          {...anchorProps}
-          className={`${styles.container} ${isEditing ? styles.containerActive : ''} ${className || ''}`}
-          onClick={() => !isEditing && setIsEditing(true)}
-        >
-          <div className={styles.label}>{label}</div>
-          <div className={styles.value}>{renderDisplay(value)}</div>
+        <div {...anchorProps}>
+          {description && !isEditing ? (
+            <Tooltip text={description} delay="long">
+              {anchorContent}
+            </Tooltip>
+          ) : (
+            anchorContent
+          )}
         </div>
       )}
       side="outside-bottom"
