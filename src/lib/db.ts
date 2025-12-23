@@ -10,6 +10,14 @@ export interface Issue {
   updatedAt: string;
   comments: number;
   description?: string;
+  fields?: {
+    dri?: string;
+    priority?: string;
+    startDate?: string;
+    targetDate?: string;
+    trending?: string;
+    engineeringStaffing?: number;
+  };
 }
 
 const STORAGE_KEY = 'github-issues-prototype';
@@ -28,6 +36,14 @@ const sampleIssues: Issue[] = [
     updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
     comments: 5,
     description: 'We need to add dark mode support to improve user experience in low-light environments.',
+    fields: {
+      dri: '@monalisa',
+      priority: 'P0',
+      startDate: '2025-12-25T00:00:00.000Z',
+      targetDate: '2025-12-25T00:00:00.000Z',
+      trending: 'on-track',
+      engineeringStaffing: 3,
+    },
   },
   {
     id: '2',
