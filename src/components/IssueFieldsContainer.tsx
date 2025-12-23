@@ -35,6 +35,7 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
         label="DRI"
         value={issue.fields?.dri || ''}
         onChange={(value) => updateField('dri', value)}
+        // forceEdit={true}
       />
       
       <IssueField_singleSelect

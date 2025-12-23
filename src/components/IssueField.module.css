@@ -50,13 +50,14 @@
   border: 1px solid var(--borderColor-default, #d0d7de);
   border-radius: var(--borderRadius-medium, 6px);
   font-family: var(--fontStack-sansSerif, "SF Pro Text");
-  font-size: var(--text-body-size-medium, 14px);
+  font-size: var(--text-body-size-small, 12px);
   line-height: var(--text-body-lineHeight-medium, 20px);
   color: var(--fgColor-default, #1f2328);
   resize: none;
   overflow: hidden;
-  min-height: 24px;
   background: var(--bgColor-default, #ffffff);
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .inlineTextarea:focus {
@@ -65,3 +66,20 @@
   border-color: transparent;
 }
 
+.inlineInput {
+  width: 100%;
+  padding: 4px;
+  border: 1px solid var(--borderColor-default, #d0d7de);
+  border-radius: var(--borderRadius-medium, 6px);
+  font-family: var(--fontStack-sansSerif, "SF Pro Text");
+  font-size: var(--text-body-size-small, 12px);
+  line-height: var(--text-body-lineHeight-medium, 20px);
+  color: var(--fgColor-default, #1f2328);
+  background: var(--bgColor-default, #ffffff);
+}
+
+.inlineInput:focus {
+  outline: 2px solid var(--focus-outlineColor, #0969da);
+  outline-offset: -1px;
+  border-color: transparent;
+}

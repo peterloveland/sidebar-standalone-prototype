@@ -1,8 +1,7 @@
 .container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: var(--base-size-8, 0.5rem);
   padding-left: 8px;
   border-radius: var(--borderRadius-medium, 6px);
   transition: background-color 0.2s;
@@ -11,30 +10,45 @@
 }
 
 .container:hover {
-  background-color: var(--bgColor-muted, #f6f8fa);
+  background-color: var(--control-bgColor-hover, #f6f8fa);
 }
 
 .containerActive {
   background-color: var(--bgColor-muted, #f6f8fa);
 }
 
+.containerActiveText, .containerActiveDate {
+    .value {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 3px;
+    padding-left: 3px;
+    display: flex;
+     }
+}
+
 .label {
   color: var(--fgColor-muted, #656d76);
   font-family: var(--fontStack-sansSerif, "SF Pro Text");
-  font-size: var(--text-body-size-medium, 14px);
+  font-size: var(--text-body-size-small, 12px);
   font-weight: var(--base-text-weight-normal, 400);
   line-height: var(--text-body-lineHeight-medium, 20px);
   flex-shrink: 0;
+  width: 30%;
+  padding-top: var(--base-size-8, 0.25rem);
+  padding-bottom: var(--base-size-8, 0.25rem);
+
 }
 
 .value {
   color: var(--fgColor-default, #1f2328);
   font-family: var(--fontStack-sansSerif, "SF Pro Text");
-  font-size: var(--text-body-size-medium, 14px);
+  font-size: var(--text-body-size-small, 12px);
   font-weight: var(--base-text-weight-normal, 400);
   line-height: var(--text-body-lineHeight-medium, 20px);
-  text-align: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  width: 70%;
+padding: var(--base-size-8, 0.5rem);
 }

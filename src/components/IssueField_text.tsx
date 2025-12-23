@@ -6,10 +6,11 @@ interface IssueField_textProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  forceEdit?: boolean;
 }
 
-export function IssueField_text({ label, value, onChange }: IssueField_textProps) {
-  const [isEditing, setIsEditing] = useState(false);
+export function IssueField_text({ label, value, onChange, forceEdit = false }: IssueField_textProps) {
+  const [isEditing, setIsEditing] = useState(forceEdit);
   const [localValue, setLocalValue] = useState(value);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -18,14 +19,21 @@ export function IssueField_text({ label, value, onChange }: IssueField_textProps
   }, [value]);
 
   useEffect(() => {
+    if (forceEdit !== undefined) {
+      setIsEditing(forceEdit);
+    }
+  }, [forceEdit]);
+
+  useEffect(() => {
     if (isEditing && textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 2.5 + 'px';
     }
   }, [isEditing]);
 
   const handleSave = () => {
+    if (forceEdit) return; // Don't save if forceEdit is enabled
     if (localValue !== value) {
       onChange(localValue);
     }
@@ -35,16 +43,25 @@ export function IssueField_text({ label, value, onChange }: IssueField_textProps
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSave();
+      if (!forceEdit) {
+        handleSave();
+      } else {
+        // Save manually when forceEdit is on
+        if (localValue !== value) {
+          onChange(localValue);
+        }
+      }
     } else if (e.key === 'Escape') {
       setLocalValue(value);
-      setIsEditing(false);
+      if (!forceEdit) {
+        setIsEditing(false);
+      }
     }
   };
 
   if (isEditing) {
     return (
-      <div className={`${styles.container} ${styles.containerActive}`}>
+      <div className={`${styles.container} ${styles.containerActive} ${styles.containerActiveText}`}>
         <div className={styles.label}>{label}</div>
         <div className={styles.value}>
           <textarea
@@ -54,7 +71,7 @@ export function IssueField_text({ label, value, onChange }: IssueField_textProps
             onChange={(e) => {
               setLocalValue(e.target.value);
               e.target.style.height = 'auto';
-              e.target.style.height = e.target.scrollHeight + 'px';
+              e.target.style.height = e.target.scrollHeight + 2.5 + 'px';
             }}
             onBlur={handleSave}
             onKeyDown={handleKeyDown}
