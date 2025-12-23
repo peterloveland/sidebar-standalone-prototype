@@ -43,6 +43,9 @@
 }
 
 .typeSelector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 2px 8px;
   border-radius: var(--borderRadius-small, 4px);
   border: var(--borderWidth-thin, 1px) solid var(--borderColor-default, #d0d7de);

@@ -8,9 +8,10 @@ interface IssueField_numberProps {
   value: number | null;
   onChange: (value: number | null) => void;
   description?: string;
+  isColorAnimating?: boolean;
 }
 
-export function IssueField_number({ label, value, onChange, description }: IssueField_numberProps) {
+export function IssueField_number({ label, value, onChange, description, isColorAnimating = false }: IssueField_numberProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value?.toString() || '');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -55,7 +56,7 @@ export function IssueField_number({ label, value, onChange, description }: Issue
 
   if (isEditing) {
     return (
-      <div className={`${styles.container} ${styles.containerActive} ${styles.containerActiveText}`}>
+      <div className={`${styles.container} ${styles.containerActive} ${styles.containerActiveText} ${isColorAnimating ? styles.containerColored : ''}`}>
         <div className={styles.label}>{label}</div>
         <div className={styles.value}>
           <input
@@ -74,7 +75,7 @@ export function IssueField_number({ label, value, onChange, description }: Issue
 
   const content = (
     <button
-      className={styles.container}
+      className={`${styles.container} ${isColorAnimating ? styles.containerColored : ''}`}
       onClick={() => setIsEditing(true)}
     >
       <div className={styles.label}>{label}</div>

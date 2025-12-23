@@ -8,11 +8,13 @@ interface IssueField_textProps {
   value: string;
   onChange: (value: string) => void;
   forceEdit?: boolean;
+  description?: string;
+  isColorAnimating?: boolean;
 }
 
 const OFFSET_HEIGHT = 2
 
-export function IssueField_text({ label, value, onChange, forceEdit = false, description }: IssueField_textProps) {
+export function IssueField_text({ label, value, onChange, forceEdit = false, description, isColorAnimating = false }: IssueField_textProps) {
   const [isEditing, setIsEditing] = useState(forceEdit);
   const [localValue, setLocalValue] = useState(value);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -67,7 +69,7 @@ export function IssueField_text({ label, value, onChange, forceEdit = false, des
 
   if (isEditing) {
     return (
-      <div className={`${styles.container} ${styles.containerActive} ${styles.containerActiveText}`}>
+      <div className={`${styles.container} ${styles.containerActive} ${styles.containerActiveText} ${isColorAnimating ? styles.containerColored : ''}`}>
         <div className={styles.label}>{label}</div>
         <div className={styles.value}>
           <textarea
@@ -91,7 +93,7 @@ export function IssueField_text({ label, value, onChange, forceEdit = false, des
 
   const content = (
     <button
-      className={styles.container}
+      className={`${styles.container} ${isColorAnimating ? styles.containerColored : ''}`}
       onClick={() => setIsEditing(true)}
     >
       <div className={styles.label}>{label}</div>

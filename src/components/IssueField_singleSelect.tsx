@@ -18,9 +18,10 @@ interface IssueField_singleSelectProps {
   options: SelectOption[];
   onChange: (value: string | null) => void;
   description?: string;
+  isColorAnimating?: boolean;
 }
 
-export function IssueField_singleSelect({ label, value, options, onChange, description }: IssueField_singleSelectProps) {
+export function IssueField_singleSelect({ label, value, options, onChange, description, isColorAnimating = false }: IssueField_singleSelectProps) {
   const [localValue, setLocalValue] = useState(value);
 
   const renderDisplay = (val: string | null) => {
@@ -74,6 +75,7 @@ export function IssueField_singleSelect({ label, value, options, onChange, descr
       onChange={onChange}
       className={rowStyles.containerSelect}
       description={description}
+      isColorAnimating={isColorAnimating}
     />
   );
 }

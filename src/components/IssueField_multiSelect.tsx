@@ -18,9 +18,10 @@ interface IssueField_multiSelectProps {
   options: SelectOption[];
   onChange: (value: string[]) => void;
   description?: string;
+  isColorAnimating?: boolean;
 }
 
-export function IssueField_multiSelect({ label, value, options, onChange, description }: IssueField_multiSelectProps) {
+export function IssueField_multiSelect({ label, value, options, onChange, description, isColorAnimating = false }: IssueField_multiSelectProps) {
   const [localValue, setLocalValue] = useState(value);
 
   const renderDisplay = (val: string[]) => {
@@ -84,6 +85,7 @@ export function IssueField_multiSelect({ label, value, options, onChange, descri
       onChange={onChange}
       className={rowStyles.containerSelect}
       description={description}
+      isColorAnimating={isColorAnimating}
     />
   );
 }

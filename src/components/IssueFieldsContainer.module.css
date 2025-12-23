@@ -1,0 +1,103 @@
+.fieldsWrapper {
+  animation: fadeIn 0.3s ease-in-out both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.field {
+  animation: slideIn 0.4s ease-out both;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fieldsContainer {
+  transition: height 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slideInPosition {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes colorFade {
+  0% {
+    opacity: 1;
+  }
+  76.9% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.fieldIn {
+  animation: slideInPosition 0.4s ease-out both;
+}
+
+.fieldColored {
+  position: relative;
+  animation: slideInPosition 0.4s ease-out both;
+}
+
+.fieldColored::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--field-bg-color);
+  animation: colorFade 2.6s ease-out both;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.fieldColored {
+  &:first-of-type::before {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  }
+  &:last-of-type::before {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+}
+
+.fieldOut {
+  animation: slideOut 0.3s ease-in both;
+}
+

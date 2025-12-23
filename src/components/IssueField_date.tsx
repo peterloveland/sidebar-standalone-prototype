@@ -8,9 +8,10 @@ interface IssueField_dateProps {
   value: string | null; // ISO date string
   onChange: (value: string | null) => void;
   description?: string;
+  isColorAnimating?: boolean;
 }
 
-export function IssueField_date({ label, value, onChange, description }: IssueField_dateProps) {
+export function IssueField_date({ label, value, onChange, description, isColorAnimating = false }: IssueField_dateProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value || '');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -54,7 +55,7 @@ export function IssueField_date({ label, value, onChange, description }: IssueFi
 
   if (isEditing) {
     return (
-      <div className={`${styles.container} ${styles.containerActive} ${styles.containerActiveDate}`}>
+      <div className={`${styles.container} ${styles.containerActive} ${styles.containerActiveDate} ${isColorAnimating ? styles.containerColored : ''}`}>
         <div className={styles.label}>{label}</div>
         <div className={styles.value}>
           <input
@@ -76,7 +77,7 @@ export function IssueField_date({ label, value, onChange, description }: IssueFi
 
   return (
     <div
-      className={styles.container}
+      className={`${styles.container} ${isColorAnimating ? styles.containerColored : ''}`}
       onClick={() => setIsEditing(true)}
     >
       <div className={styles.label}>{label}</div>

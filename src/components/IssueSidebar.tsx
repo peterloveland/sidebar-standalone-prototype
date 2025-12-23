@@ -28,6 +28,12 @@ export function IssueSidebar({ issueId }: IssueSidebarProps) {
       </div>
       <LabelsRow issueId={issueId} />
       <IssueFieldsContainer issueId={issueId} />
+      Test
+      Test
+      Test
+      Test
+      Test
+      Test
     </div>
   );
 }

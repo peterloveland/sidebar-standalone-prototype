@@ -3,8 +3,11 @@ import { db } from '../lib/db';
 import { CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { CircleDot, CheckCircle2, Calendar, User, MessageSquare } from 'lucide-react';
+import { CircleDot, CheckCircle2, Calendar, User, MessageSquare, ChevronDown } from 'lucide-react';
 import { IssueSidebar } from './IssueSidebar';
+import { AnchoredOverlay, ActionList, CounterLabel } from '@primer/react';
+import { ColorDot } from './ColorDot';
+import { useState } from 'react';
 import styles from './IssueDetail.module.css';
 
 interface IssueDetailProps {
@@ -14,6 +17,8 @@ interface IssueDetailProps {
 }
 
 export function IssueDetail({ issue, onToggleState, onClose }: IssueDetailProps) {
+  const [isTypeOpen, setIsTypeOpen] = useState(false);
+
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {
       month: 'short',
@@ -27,9 +32,11 @@ export function IssueDetail({ issue, onToggleState, onClose }: IssueDetailProps)
   const handleTypeChange = (newType: IssueType | '') => {
     db.update(issue.id, { type: newType || undefined });
     window.dispatchEvent(new Event('storage'));
+    setIsTypeOpen(false);
   };
 
   const issueTypes = db.getIssueTypes();
+  const currentTypeConfig = issue.type ? issueTypes.find(t => t.type === issue.type) : null;
 
   return (
     <div className={styles.container}>
@@ -46,18 +53,66 @@ export function IssueDetail({ issue, onToggleState, onClose }: IssueDetailProps)
                 {issue.state}
               </Badge>
               <span className={styles.issueNumber}>#{issue.number}</span>
-              <select 
-                value={issue.type || ''} 
-                onChange={(e) => handleTypeChange(e.target.value as IssueType | '')}
-                className={styles.typeSelector}
+              <AnchoredOverlay
+                open={isTypeOpen}
+                onOpen={() => setIsTypeOpen(true)}
+                onClose={() => setIsTypeOpen(false)}
+                renderAnchor={(anchorProps) => (
+                  <button
+                    {...anchorProps}
+                    className={styles.typeSelector}
+                    onClick={() => setIsTypeOpen(!isTypeOpen)}
+                  >
+                    {currentTypeConfig && (
+                      <ColorDot color={currentTypeConfig.color} />
+                    )}
+                    <span>{currentTypeConfig?.label || '(No type)'}</span>
+                    <ChevronDown size={14} />
+                  </button>
+                )}
+                side="outside-bottom"
+                align="start"
               >
-                <option value="">(No type)</option>
-                {issueTypes.map((typeConfig) => (
-                  <option key={typeConfig.type} value={typeConfig.type}>
-                    {typeConfig.label}
-                  </option>
-                ))}
-              </select>
+                <div style={{ width: "200px" }}>
+                  <ActionList selectionVariant="single">
+                    <ActionList.Item
+                      role="menuitemradio"
+                      selected={!issue.type}
+                      aria-checked={!issue.type}
+                      onSelect={() => handleTypeChange('')}
+                    >
+                      <ActionList.LeadingVisual>
+                        <ColorDot color="gray" />
+                      </ActionList.LeadingVisual>
+                      (No type)
+                      <ActionList.TrailingVisual>
+                        <CounterLabel>
+                          {db.getDefaultFieldIds().length} fields
+                        </CounterLabel>
+                      </ActionList.TrailingVisual>
+                    </ActionList.Item>
+                    {issueTypes.map((typeConfig) => (
+                      <ActionList.Item
+                        key={typeConfig.type}
+                        role="menuitemradio"
+                        selected={issue.type === typeConfig.type}
+                        aria-checked={issue.type === typeConfig.type}
+                        onSelect={() => handleTypeChange(typeConfig.type)}
+                      >
+                        <ActionList.LeadingVisual>
+                          <ColorDot color={typeConfig.color} />
+                        </ActionList.LeadingVisual>
+                        {typeConfig.label}
+                        <ActionList.TrailingVisual>
+                          <CounterLabel>
+                            {typeConfig.fieldIds.length} fields
+                          </CounterLabel>
+                        </ActionList.TrailingVisual>
+                      </ActionList.Item>
+                    ))}
+                  </ActionList>
+                </div>
+              </AnchoredOverlay>
             </div>
             <CardTitle className={styles.title}>{issue.title}</CardTitle>
           </div>

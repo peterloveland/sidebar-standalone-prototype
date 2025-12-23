@@ -21,6 +21,7 @@ export type IssueType = 'bug' | 'epic' | 'task' | 'feature';
 export interface IssueTypeConfig {
   type: IssueType;
   label: string;
+  color: 'red' | 'green' | 'blue' | 'purple';
   fieldIds: string[]; // References to FieldDefinition.id
 }
 
@@ -185,21 +186,25 @@ const defaultIssueTypes: IssueTypeConfig[] = [
   {
     type: 'bug',
     label: 'Bug',
-    fieldIds: ['priority', 'severity', 'status', 'dri', 'dueDate', 'reproSteps', 'environment', 'tags'],
+    color: 'red',
+    fieldIds: ['priority', 'severity', 'status', 'dri', 'tags'],
   },
   {
     type: 'feature',
     label: 'Feature',
+    color: 'blue',
     fieldIds: ['priority', 'status', 'dri', 'startDate', 'targetDate', 'trending', 'engineeringStaffing', 'storyPoints', 'tags'],
   },
   {
     type: 'epic',
     label: 'Epic',
+    color: 'purple',
     fieldIds: ['priority', 'status', 'dri', 'startDate', 'targetDate', 'trending', 'engineeringStaffing', 'tags'],
   },
   {
     type: 'task',
     label: 'Task',
+    color: 'green',
     fieldIds: ['priority', 'status', 'dri', 'dueDate', 'storyPoints', 'epicLink', 'tags'],
   },
 ];
