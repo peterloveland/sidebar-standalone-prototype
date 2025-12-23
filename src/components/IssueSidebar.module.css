@@ -65,6 +65,12 @@
 
 .assigneeChip {
   position: relative;
+    opacity: 1;
+transition: .4s;
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
 }
 
 .assigneeChipInner {

@@ -29,6 +29,8 @@ export function LabelsRow({ issueId }: LabelsRowProps) {
   const [localLabels, setLocalLabels] = useState<string[]>([]);
   const [hoverCardPosition, setHoverCardPosition] = useState({ top: 0, left: 0 });
   const chipRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const prevLabelsRef = useRef<string[]>([]);
+  const newLabelIndicesRef = useRef<Map<string, number>>(new Map());
   const issue = db.getById(issueId);
 
   useEffect(() => {
@@ -91,10 +93,32 @@ export function LabelsRow({ issueId }: LabelsRowProps) {
       return null;
     }
 
+    // Find newly added labels and assign them indices
+    const newLabels = labels.filter(label => !prevLabelsRef.current.includes(label));
+    
+    // Assign indices to new labels
+    newLabels.forEach((label, index) => {
+      if (!newLabelIndicesRef.current.has(label)) {
+        newLabelIndicesRef.current.set(label, index);
+      }
+    });
+    
+    // Clean up indices for removed labels
+    prevLabelsRef.current.forEach(label => {
+      if (!labels.includes(label)) {
+        newLabelIndicesRef.current.delete(label);
+      }
+    });
+    
+    prevLabelsRef.current = labels;
+
     return (
       <div className={styles.multipleListContainer}>
         {labels.map((label) => {
           const color = getLabelColor(label);
+          const newLabelIndex = newLabelIndicesRef.current.get(label);
+          const hasDelay = newLabelIndex !== undefined;
+          
           return (
             <div
               key={label}
@@ -116,6 +140,7 @@ export function LabelsRow({ issueId }: LabelsRowProps) {
                   backgroundColor: color,
                   color: getContrastColor(color),
                   borderColor: color,
+                  transitionDelay: hasDelay ? `${newLabelIndex * 0.025}s` : '0s'
                 }}
               >
                 {label}

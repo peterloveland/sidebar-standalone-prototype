@@ -54,6 +54,8 @@ export function IssueField_date({ label, value, onChange, description, isColorAn
   };
 
   if (isEditing) {
+    const displayValue = localValue ? localValue.split('T')[0] : new Date().toISOString().split('T')[0];
+    
     return (
       <div className={`${styles.container} ${styles.containerActive} ${styles.containerActiveDate} ${isColorAnimating ? styles.containerColored : ''}`}>
         <div className={styles.label}>{label}</div>
@@ -62,7 +64,7 @@ export function IssueField_date({ label, value, onChange, description, isColorAn
             ref={inputRef}
             type="date"
             className={fieldStyles.inlineInput}
-            value={localValue ? localValue.split('T')[0] : ''}
+            value={displayValue}
             onChange={(e) => {
               const newValue = e.target.value ? new Date(e.target.value).toISOString() : '';
               setLocalValue(newValue);

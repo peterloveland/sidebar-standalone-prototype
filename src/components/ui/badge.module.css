@@ -6,8 +6,14 @@
   padding: var(--base-size-2, 0.125rem) var(--base-size-10, 0.625rem);
   font-size: var(--text-body-size-small, 0.75rem);
   font-weight: var(--base-text-weight-semibold, 600);
-  transition: all 0.2s;
+  transition: .5s;
   height: 20px;
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
 }
 
 .badge:focus {

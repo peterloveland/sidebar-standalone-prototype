@@ -1,4 +1,4 @@
-import { useState, useRef, ReactNode } from 'react';
+import { useState, useRef, ReactNode, useEffect } from 'react';
 import { AnchoredOverlay } from '@primer/react';
 import styles from './SidebarRow.module.css';
 import { SidebarLabel } from './SidebarLabel';
@@ -31,11 +31,52 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
   disableClickToEdit = false,
 }: SidebarRowProps<T>) {
   const [isEditing, setIsEditing] = useState(false);
+  const [lockedHeight, setLockedHeight] = useState<number | null>(null);
+  const [useCalcSize, setUseCalcSize] = useState(false);
+  const [valueChangedWhileEditing, setValueChangedWhileEditing] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const prevValueRef = useRef<T>(value);
 
   const handleEditingChange = (editing: boolean) => {
+    if (editing && !isEditing && contentRef.current) {
+      // Lock height when entering edit mode
+      const height = contentRef.current.offsetHeight;
+      setLockedHeight(height);
+      setUseCalcSize(false);
+      setValueChangedWhileEditing(false);
+    }
     setIsEditing(editing);
     onEditingChange?.(editing);
   };
+
+  // Detect value changes while editing
+  useEffect(() => {
+    if (isEditing && value !== prevValueRef.current) {
+      // Value changed while editing, flag it but don't animate yet
+      setValueChangedWhileEditing(true);
+    }
+    prevValueRef.current = value;
+  }, [value, isEditing]);
+
+  // Animate when editing ends if value changed
+  useEffect(() => {
+    if (!isEditing && valueChangedWhileEditing && lockedHeight !== null) {
+      // Dialog closed and value changed, now animate height only
+      // Keep content visible so React can diff and only animate new items
+      // Force reflow to ensure the locked height is painted
+      if (contentRef.current) {
+        contentRef.current.offsetHeight;
+      }
+      requestAnimationFrame(() => {
+        setUseCalcSize(true);
+      });
+    } else if (!isEditing) {
+      // Reset if no value change
+      setLockedHeight(null);
+      setUseCalcSize(false);
+      setValueChangedWhileEditing(false);
+    }
+  }, [isEditing, valueChangedWhileEditing, lockedHeight]);
 
   const hasValue = (() => {
     if (value === null || value === undefined) return false;
@@ -45,7 +86,7 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
   })();
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${isEditing ? styles.editing : ''}`}>
       <AnchoredOverlay
         open={isEditing}
         onOpen={() => handleEditingChange(true)}
@@ -66,11 +107,19 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
           {renderEditor(value, onChange)}
       </AnchoredOverlay>
       <div
+        ref={contentRef}
         onClick={() =>
           !disableClickToEdit && !isEditing && handleEditingChange(true)
         }
-        className={`${styles.clickable}`}
-        style={{ cursor: "default", padding: renderDisplay(value) ? undefined : '0' }}
+        className={`${styles.clickable} ${useCalcSize ? styles.animateHeight : ''}`}
+        style={{ 
+          cursor: "default", 
+          padding: renderDisplay(value) ? undefined : '0',
+          height: lockedHeight !== null && !useCalcSize
+            ? `${lockedHeight}px`
+            : undefined,
+          transition: lockedHeight !== null && !useCalcSize ? 'height 1s' : undefined,
+        }}
       >
         {renderDisplay(value)}
       </div>
@@ -78,3 +127,4 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
     </div>
   );
 }
+       

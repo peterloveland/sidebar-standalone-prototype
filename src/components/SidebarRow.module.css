@@ -2,6 +2,10 @@
   /* margin-bottom: var(--base-size-16, 1rem); */
 }
 
+.editing {
+  /* Applied when editing is active */
+}
+
 .clickable {
   width: 100%;
   padding: var(--base-size-6);
@@ -29,6 +33,11 @@
 
 .footer {
   margin-top: var(--base-size-4, 4px);
+}
+
+.animateHeight {
+  height: calc-size(auto, size * 1) !important;
+  transition: height .4s;
 }
 
 .backdrop {

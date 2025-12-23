@@ -45,6 +45,8 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
   const [localAssignees, setLocalAssignees] = useState<string[]>([]);
   const [hoverCardPosition, setHoverCardPosition] = useState({ top: 0, left: 0 });
   const chipRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const prevAssigneesRef = useRef<string[]>([]);
+  const newAssigneeIndicesRef = useRef<Map<string, number>>(new Map());
   const issue = db.getById(issueId);
 
   useEffect(() => {
@@ -135,12 +137,34 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
       );
     }
 
+    // Find newly added assignees and assign them indices
+    const newAssignees = humanOnly.filter(assignee => !prevAssigneesRef.current.includes(assignee));
+    
+    // Assign indices to new assignees
+    newAssignees.forEach((assignee, index) => {
+      if (!newAssigneeIndicesRef.current.has(assignee)) {
+        newAssigneeIndicesRef.current.set(assignee, index);
+      }
+    });
+    
+    // Clean up indices for removed assignees
+    prevAssigneesRef.current.forEach(assignee => {
+      if (!humanOnly.includes(assignee)) {
+        newAssigneeIndicesRef.current.delete(assignee);
+      }
+    });
+    
+    prevAssigneesRef.current = humanOnly;
+
     return (
       <div className={styles.multipleListContainer}>
         {humanOnly.map((assignee) => {
           const userInfo = AVAILABLE_ASSIGNEES.find(
             (u) => u.username === assignee
           );
+          const newAssigneeIndex = newAssigneeIndicesRef.current.get(assignee);
+          const hasDelay = newAssigneeIndex !== undefined;
+          
           return (
             <div
               key={assignee}
@@ -152,7 +176,11 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
                   clickedAssignee === assignee ? null : assignee
                 );
               }}
-              style={{ cursor: "pointer", position: "relative" }}
+              style={{ 
+                cursor: "pointer", 
+                position: "relative",
+                transitionDelay: hasDelay ? `${newAssigneeIndex * 0.05}s` : '0s'
+              }}
             >
               <div className={styles.assigneeChipInner}>
                 {userInfo ? (
