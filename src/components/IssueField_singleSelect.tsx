@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { ActionList } from '@primer/react';
+import { ColorBadge } from './ColorBadge';
+import { ColorDot } from './ColorDot';
 import { IssueFieldRow } from './IssueFieldRow';
 import styles from './IssueField.module.css';
 
 interface SelectOption {
   label: string;
   value: string;
+  color: string;
 }
 
 interface IssueField_singleSelectProps {
@@ -21,7 +24,12 @@ export function IssueField_singleSelect({ label, value, options, onChange }: Iss
   const renderDisplay = (val: string | null) => {
     if (!val) return <span className={styles.emptyState}>None</span>;
     const option = options.find(opt => opt.value === val);
-    return option?.label || val;
+    if (!option) return val;
+    return (
+      <ColorBadge color={option.color}>
+        {option.label}
+      </ColorBadge>
+    );
   };
 
   const renderEditor = (val: string | null, onChangeCallback: (newValue: string | null) => void, onClose: () => void) => {
@@ -40,6 +48,9 @@ export function IssueField_singleSelect({ label, value, options, onChange }: Iss
                 onClose();
               }}
             >
+              <ActionList.LeadingVisual>
+                <ColorDot color={option.color} />
+              </ActionList.LeadingVisual>
               {option.label}
             </ActionList.Item>
           ))}

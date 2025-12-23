@@ -1,0 +1,52 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  height: 20px;
+}
+
+.blue {
+  border: 1px solid var(--borderColor-accent-muted);
+  background: var(--bgColor-accent-muted);
+  color: var(--fgColor-accent);
+}
+
+.green {
+  border: 1px solid var(--borderColor-success-muted);
+  background: var(--bgColor-success-muted);
+  color: var(--fgColor-success);
+}
+
+.red {
+  border: 1px solid var(--borderColor-danger-muted);
+  background: var(--bgColor-closed-muted);
+  color: var(--fgColor-danger);
+}
+
+.orange {
+  border: 1px solid var(--borderColor-severe-muted);
+  background: var(--bgColor-severe-muted);
+  color: var(--fgColor-severe);
+}
+
+.yellow {
+  border: 1px solid var(--borderColor-attention-muted);
+  background: var(--bgColor-attention-muted);
+  color: var(--fgColor-attention);
+}
+
+.purple {
+  border: 1px solid var(--borderColor-upsell-muted);
+  background: var(--bgColor-done-muted);
+  color: var(--fgColor-done);
+}
+
+.gray {
+  border: 1px solid var(--borderColor-muted);
+  background: var(--bgColor-muted);
+  color: var(--fgColor-muted);
+}

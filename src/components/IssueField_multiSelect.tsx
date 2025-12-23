@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { ActionList } from '@primer/react';
+import { ColorBadge } from './ColorBadge';
+import { ColorDot } from './ColorDot';
 import { IssueFieldRow } from './IssueFieldRow';
 import styles from './IssueField.module.css';
 
 interface SelectOption {
   label: string;
   value: string;
+  color: string;
 }
 
 interface IssueField_multiSelectProps {
@@ -20,8 +23,19 @@ export function IssueField_multiSelect({ label, value, options, onChange }: Issu
 
   const renderDisplay = (val: string[]) => {
     if (!val || val.length === 0) return <span className={styles.emptyState}>None</span>;
-    const labels = val.map(v => options.find(opt => opt.value === v)?.label || v);
-    return labels.join(', ');
+    return (
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+        {val.map(v => {
+          const option = options.find(opt => opt.value === v);
+          if (!option) return null;
+          return (
+            <ColorBadge key={v} color={option.color}>
+              {option.label}
+            </ColorBadge>
+          );
+        })}
+      </div>
+    );
   };
 
   const renderEditor = (val: string[], onChangeCallback: (newValue: string[]) => void, onClose: () => void) => {
@@ -44,6 +58,9 @@ export function IssueField_multiSelect({ label, value, options, onChange }: Issu
               aria-checked={localValue.includes(option.value)}
               onSelect={() => toggleValue(option.value)}
             >
+              <ActionList.LeadingVisual>
+                <ColorDot color={option.color} />
+              </ActionList.LeadingVisual>
               {option.label}
             </ActionList.Item>
           ))}

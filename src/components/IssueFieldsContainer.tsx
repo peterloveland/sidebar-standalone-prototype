@@ -42,10 +42,10 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
         label="Priority"
         value={issue.fields?.priority || null}
         options={[
-          { label: "P0", value: "P0" },
-          { label: "P1", value: "P1" },
-          { label: "P2", value: "P2" },
-          { label: "P3", value: "P3" },
+          { label: "P0", value: "P0", color: "red" },
+          { label: "P1", value: "P1", color: "orange" },
+          { label: "P2", value: "P2", color: "yellow" },
+          { label: "P3", value: "P3", color: "gray" },
         ]}
         onChange={(value) => updateField("priority", value)}
       />
@@ -67,9 +67,9 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
         label="Trending"
         value={issue.fields?.trending || null}
         options={[
-          { label: "On track", value: "on-track" },
-          { label: "At risk", value: "at-risk" },
-          { label: "Off track", value: "off-track" },
+          { label: "On track", value: "on-track", color: "green" },
+          { label: "At risk", value: "at-risk", color: "orange" },
+          { label: "Off track", value: "off-track", color: "red" },
         ]}
         onChange={(value) => updateField("trending", value)}
       />
@@ -83,11 +83,11 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
         label="Tags"
         value={issue.fields?.tags || []}
         options={[
-          { label: 'Frontend', value: 'frontend' },
-          { label: 'Backend', value: 'backend' },
-          { label: 'Database', value: 'database' },
-          { label: 'API', value: 'api' },
-          { label: 'UI/UX', value: 'ui-ux' },
+          { label: 'Frontend', value: 'frontend', color: 'blue' },
+          { label: 'Backend', value: 'backend', color: 'purple' },
+          { label: 'Database', value: 'database', color: 'green' },
+          { label: 'API', value: 'api', color: 'orange' },
+          { label: 'UI/UX', value: 'ui-ux', color: 'red' },
         ]}
         onChange={(value) => updateField('tags', value)}
       />    </div>

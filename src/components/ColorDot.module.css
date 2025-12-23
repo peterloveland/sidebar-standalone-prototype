@@ -1,0 +1,41 @@
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.blue {
+  border: 1px solid var(--borderColor-accent-muted);
+  background: var(--bgColor-accent-muted);
+}
+
+.green {
+  border: 1px solid var(--borderColor-success-muted);
+  background: var(--bgColor-success-muted);
+}
+
+.red {
+  border: 1px solid var(--borderColor-danger-muted);
+  background: var(--bgColor-closed-muted);
+}
+
+.orange {
+  border: 1px solid var(--borderColor-severe-muted);
+  background: var(--bgColor-severe-muted);
+}
+
+.yellow {
+  border: 1px solid var(--borderColor-attention-muted);
+  background: var(--bgColor-attention-muted);
+}
+
+.purple {
+  border: 1px solid var(--borderColor-upsell-muted);
+  background: var(--bgColor-done-muted);
+}
+
+.gray {
+  border: 1px solid var(--borderColor-muted);
+  background: var(--bgColor-muted);
+}
