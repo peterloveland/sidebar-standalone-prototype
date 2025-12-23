@@ -4,7 +4,7 @@
   padding-inline: 8px;
   border-radius: 12px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: var(--base-text-weight-medium, 500);
   white-space: nowrap;
   height: 20px;
 }
