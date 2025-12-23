@@ -8,6 +8,7 @@ interface IssueFieldRowProps<T = any> {
   renderDisplay: (value: T) => ReactNode;
   renderEditor: (value: T, onChange: (newValue: T) => void, onClose: () => void) => ReactNode;
   onChange: (value: T) => void;
+  className?: string;
 }
 
 export function IssueFieldRow<T = any>({
@@ -16,6 +17,7 @@ export function IssueFieldRow<T = any>({
   renderDisplay,
   renderEditor,
   onChange,
+  className,
 }: IssueFieldRowProps<T>) {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -27,7 +29,7 @@ export function IssueFieldRow<T = any>({
       renderAnchor={(anchorProps) => (
         <div
           {...anchorProps}
-          className={`${styles.container} ${isEditing ? styles.containerActive : ''}`}
+          className={`${styles.container} ${isEditing ? styles.containerActive : ''} ${className || ''}`}
           onClick={() => !isEditing && setIsEditing(true)}
         >
           <div className={styles.label}>{label}</div>

@@ -4,6 +4,7 @@ import { ColorBadge } from './ColorBadge';
 import { ColorDot } from './ColorDot';
 import { IssueFieldRow } from './IssueFieldRow';
 import styles from './IssueField.module.css';
+import rowStyles from './IssueFieldRow.module.css';
 
 interface SelectOption {
   label: string;
@@ -70,6 +71,7 @@ export function IssueField_singleSelect({ label, value, options, onChange }: Iss
       renderDisplay={renderDisplay}
       renderEditor={renderEditor}
       onChange={onChange}
+      className={rowStyles.containerSelect}
     />
   );
 }
