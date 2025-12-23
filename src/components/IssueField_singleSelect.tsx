@@ -24,17 +24,20 @@ export function IssueField_singleSelect({ label, value, options, onChange }: Iss
     return option?.label || val;
   };
 
-  const renderEditor = (val: string | null, onChangeCallback: (newValue: string | null) => void) => {
+  const renderEditor = (val: string | null, onChangeCallback: (newValue: string | null) => void, onClose: () => void) => {
     return (
       <div style={{ width: "296px" }}>
         <ActionList selectionVariant="single">
           {options.map((option) => (
             <ActionList.Item
               key={option.value}
+              role="menuitemradio"
               selected={localValue === option.value}
+              aria-checked={localValue === option.value}
               onSelect={() => {
                 setLocalValue(option.value);
                 onChange(option.value);
+                onClose();
               }}
             >
               {option.label}

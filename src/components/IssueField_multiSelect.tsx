@@ -24,7 +24,7 @@ export function IssueField_multiSelect({ label, value, options, onChange }: Issu
     return labels.join(', ');
   };
 
-  const renderEditor = (val: string[], onChangeCallback: (newValue: string[]) => void) => {
+  const renderEditor = (val: string[], onChangeCallback: (newValue: string[]) => void, onClose: () => void) => {
     const toggleValue = (optionValue: string) => {
       const newValue = localValue.includes(optionValue)
         ? localValue.filter(v => v !== optionValue)
@@ -39,7 +39,9 @@ export function IssueField_multiSelect({ label, value, options, onChange }: Issu
           {options.map((option) => (
             <ActionList.Item
               key={option.value}
+              role="menuitemradio"
               selected={localValue.includes(option.value)}
+              aria-checked={localValue.includes(option.value)}
               onSelect={() => toggleValue(option.value)}
             >
               {option.label}

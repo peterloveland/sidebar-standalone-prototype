@@ -6,7 +6,7 @@ interface IssueFieldRowProps<T = any> {
   label: string;
   value: T;
   renderDisplay: (value: T) => ReactNode;
-  renderEditor: (value: T, onChange: (newValue: T) => void) => ReactNode;
+  renderEditor: (value: T, onChange: (newValue: T) => void, onClose: () => void) => ReactNode;
   onChange: (value: T) => void;
 }
 
@@ -37,7 +37,7 @@ export function IssueFieldRow<T = any>({
       side="outside-bottom"
       align="start"
     >
-      {renderEditor(value, onChange)}
+      {renderEditor(value, onChange, () => setIsEditing(false))}
     </AnchoredOverlay>
   );
 }
