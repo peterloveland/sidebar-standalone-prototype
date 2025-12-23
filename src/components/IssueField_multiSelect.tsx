@@ -24,6 +24,18 @@ interface IssueField_multiSelectProps {
 export function IssueField_multiSelect({ label, value, options, onChange, description, isColorAnimating = false }: IssueField_multiSelectProps) {
   const [localValue, setLocalValue] = useState(value);
 
+  const handleEditingChange = (isEditing: boolean) => {
+    if (isEditing) {
+      // When opening, set local state to current value
+      setLocalValue(value);
+    } else {
+      // When closing, save changes if different
+      if (JSON.stringify(localValue) !== JSON.stringify(value)) {
+        onChange(localValue);
+      }
+    }
+  };
+
   const renderDisplay = (val: string[]) => {
     if (!val || val.length === 0) return <span className={styles.emptyState}>None</span>;
     return (
@@ -47,7 +59,6 @@ export function IssueField_multiSelect({ label, value, options, onChange, descri
         ? localValue.filter(v => v !== optionValue)
         : [...localValue, optionValue];
       setLocalValue(newValue);
-      onChange(newValue);
     };
 
     return (
@@ -83,6 +94,7 @@ export function IssueField_multiSelect({ label, value, options, onChange, descri
       renderDisplay={renderDisplay}
       renderEditor={renderEditor}
       onChange={onChange}
+      onEditingChange={handleEditingChange}
       className={rowStyles.containerSelect}
       description={description}
       isColorAnimating={isColorAnimating}

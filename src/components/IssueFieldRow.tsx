@@ -8,6 +8,7 @@ interface IssueFieldRowProps<T = any> {
   renderDisplay: (value: T) => ReactNode;
   renderEditor: (value: T, onChange: (newValue: T) => void, onClose: () => void) => ReactNode;
   onChange: (value: T) => void;
+  onEditingChange?: (isEditing: boolean) => void;
   className?: string;
   description?: string;
   isColorAnimating?: boolean;
@@ -19,6 +20,7 @@ export function IssueFieldRow<T = any>({
   renderDisplay,
   renderEditor,
   onChange,
+  onEditingChange,
   className,
   description,
   isColorAnimating = false,
@@ -35,10 +37,16 @@ export function IssueFieldRow<T = any>({
       
       // Then start editing and animate
       setIsEditing(true);
+      onEditingChange?.(true);
       requestAnimationFrame(() => {
         setContainerHeight('calc-size(auto, size * 1)');
       });
     }
+  };
+
+  const handleClose = () => {
+    setIsEditing(false);
+    onEditingChange?.(false);
   };
 
   useEffect(() => {
@@ -62,8 +70,11 @@ export function IssueFieldRow<T = any>({
   return (
     <AnchoredOverlay
       open={isEditing}
-      onOpen={() => setIsEditing(true)}
-      onClose={() => setIsEditing(false)}
+      onOpen={() => {
+        setIsEditing(true);
+        onEditingChange?.(true);
+      }}
+      onClose={handleClose}
       renderAnchor={(anchorProps) => (
         <div {...anchorProps} style={{ height: containerHeight, transition: 'height 0.3s ease-in-out', overflow: 'hidden' }}>
           {description && !isEditing ? (
@@ -78,7 +89,7 @@ export function IssueFieldRow<T = any>({
       side="outside-bottom"
       align="start"
     >
-      {renderEditor(value, onChange, () => setIsEditing(false))}
+      {renderEditor(value, onChange, handleClose)}
     </AnchoredOverlay>
   );
 }

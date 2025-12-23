@@ -94,11 +94,11 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
                 setAnimationState('idle');
               }, 600);
               timersRef.current.push(inTimer);
-            }, 200);
+            }, 10); // how long after container starts animating in
             timersRef.current.push(fieldDelayTimer);
           });
         });
-      }, 300);
+      }, 200); // duration of slide-out animation
       timersRef.current.push(outTimer);
 
       return () => {

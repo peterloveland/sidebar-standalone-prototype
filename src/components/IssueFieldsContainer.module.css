@@ -40,14 +40,14 @@
   }
   to {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-8px);
   }
 }
 
 @keyframes slideInPosition {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
@@ -98,6 +98,6 @@
 }
 
 .fieldOut {
-  animation: slideOut 0.3s ease-in both;
+  animation: slideOut 0.2s ease-in both;
 }
 
