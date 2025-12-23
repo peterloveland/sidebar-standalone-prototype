@@ -1,4 +1,5 @@
-import type { Issue } from '../lib/db';
+import type { Issue, IssueType } from '../lib/db';
+import { db } from '../lib/db';
 import { CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -23,6 +24,13 @@ export function IssueDetail({ issue, onToggleState, onClose }: IssueDetailProps)
     });
   };
 
+  const handleTypeChange = (newType: IssueType | '') => {
+    db.update(issue.id, { type: newType || undefined });
+    window.dispatchEvent(new Event('storage'));
+  };
+
+  const issueTypes = db.getIssueTypes();
+
   return (
     <div className={styles.container}>
       <CardHeader className={styles.header}>
@@ -38,6 +46,18 @@ export function IssueDetail({ issue, onToggleState, onClose }: IssueDetailProps)
                 {issue.state}
               </Badge>
               <span className={styles.issueNumber}>#{issue.number}</span>
+              <select 
+                value={issue.type || ''} 
+                onChange={(e) => handleTypeChange(e.target.value as IssueType | '')}
+                className={styles.typeSelector}
+              >
+                <option value="">(No type)</option>
+                {issueTypes.map((typeConfig) => (
+                  <option key={typeConfig.type} value={typeConfig.type}>
+                    {typeConfig.label}
+                  </option>
+                ))}
+              </select>
             </div>
             <CardTitle className={styles.title}>{issue.title}</CardTitle>
           </div>
