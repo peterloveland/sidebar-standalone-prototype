@@ -4,6 +4,7 @@ import { AgentsRow } from './AgentsRow';
 import styles from './IssueSidebar.module.css';
 import { LabelsRow } from './LabelsRow';
 import { IssueFieldsContainer } from './IssueFieldsContainer';
+import { HeightAnimationDemo } from './HeightAnimationDemo';
 
 interface IssueSidebarProps {
   issueId: string;
@@ -28,12 +29,9 @@ export function IssueSidebar({ issueId }: IssueSidebarProps) {
       </div>
       <LabelsRow issueId={issueId} />
       <IssueFieldsContainer issueId={issueId} />
-      Test
-      Test
-      Test
-      Test
-      Test
-      Test
+      Test Test Test Test
+      <HeightAnimationDemo />
+      Test Test
     </div>
   );
 }

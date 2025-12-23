@@ -1,0 +1,4 @@
+.animateHeight {
+  height: calc-size(auto, size * 1) !important;
+  transition: height .4s;
+}

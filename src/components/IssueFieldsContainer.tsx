@@ -7,6 +7,7 @@ import { IssueField_date } from './IssueField_date';
 import { db, type FieldDefinition } from '../lib/db';
 import { useState, useEffect, useRef } from 'react';
 import styles from './IssueFieldsContainer.module.css';
+import { useHeightAnimation } from '../hooks/useHeightAnimation';
 
 interface IssueFieldsContainerProps {
   issueId: string;
@@ -20,11 +21,10 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
   const [nextFieldIds, setNextFieldIds] = useState<string[]>([]);
   const previousTypeRef = useRef<string | undefined>(issue?.type);
   const isInitialMount = useRef(true);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [lockedHeight, setLockedHeight] = useState<number | null>(null);
   const [showFieldAnimations, setShowFieldAnimations] = useState(true);
   const [showColorFade, setShowColorFade] = useState(false);
   const timersRef = useRef<NodeJS.Timeout[]>([]);
+  const { lockHeight, animateToAuto, getContainerProps } = useHeightAnimation(300);
 
   useEffect(() => {
     if (!issue) return;
@@ -57,9 +57,7 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
       setNextFieldIds(newFieldIds);
       
       // Step 1: Lock the current height
-      if (containerRef.current) {
-        setLockedHeight(containerRef.current.offsetHeight);
-      }
+      lockHeight();
       
       // Step 2: Start with slide-out animation
       setAnimationState('out');
@@ -77,7 +75,7 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
         // Next frame, unlock height to start container animation
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            setLockedHeight(null);
+            animateToAuto();
             
             // Wait 200ms before animating fields in
             const fieldDelayTimer = setTimeout(() => {
@@ -231,28 +229,14 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
     } as React.CSSProperties;
   };
 
-  const getContainerStyle = () => {
-    if (lockedHeight !== null) {
-      // Height is locked - stay at current height
-      return { height: `${lockedHeight}px` };
-    }
-    
-    if (animationState === 'in') {
-      // Animate to auto height
-      return { height: 'calc-size(auto, size * 1)' };
-    }
-    
-    // Default idle state
-    return { height: 'auto' };
-  };
+  const containerProps = getContainerProps();
 
   return (
     <div>
       <SidebarLabel showPlusIcon={false}>Fields</SidebarLabel>
       <div
-        ref={containerRef}
-        className={styles.fieldsContainer}
-        style={getContainerStyle()}
+        {...containerProps}
+        className={`${styles.fieldsContainer} ${containerProps.className}`}
       >
         {fields.map((field, index) => (
           <div

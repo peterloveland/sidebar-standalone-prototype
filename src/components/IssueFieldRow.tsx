@@ -1,6 +1,7 @@
-import { useState, ReactNode, useRef, useEffect } from 'react';
+import { useState, ReactNode } from 'react';
 import { AnchoredOverlay, Tooltip } from '@primer/react';
 import styles from './IssueFieldRow.module.css';
+import { useHeightAnimation } from '../hooks/useHeightAnimation';
 
 interface IssueFieldRowProps<T = any> {
   label: string;
@@ -26,39 +27,28 @@ export function IssueFieldRow<T = any>({
   isColorAnimating = false,
 }: IssueFieldRowProps<T>) {
   const [isEditing, setIsEditing] = useState(false);
-  const [containerHeight, setContainerHeight] = useState<string>('auto');
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const { lockHeight, animateToAuto, getContainerProps } = useHeightAnimation();
 
   const handleOpenEdit = () => {
-    if (!isEditing && buttonRef.current) {
-      // Lock current height before opening
-      const currentHeight = buttonRef.current.offsetHeight;
-      setContainerHeight(`${currentHeight}px`);
-      
-      // Then start editing and animate
+    if (!isEditing) {
+      lockHeight();
       setIsEditing(true);
       onEditingChange?.(true);
-      requestAnimationFrame(() => {
-        setContainerHeight('calc-size(auto, size * 1)');
-      });
+      setTimeout(() => animateToAuto(), 100);
     }
   };
 
   const handleClose = () => {
+    lockHeight();
     setIsEditing(false);
     onEditingChange?.(false);
+    setTimeout(() => animateToAuto(), 100);
   };
 
-  useEffect(() => {
-    if (!isEditing) {
-      // When closing, apply calc-size to animate the height change
-      setContainerHeight('calc-size(auto, size * 1)');
-    }
-  }, [isEditing]);
+  const containerProps = getContainerProps();
 
   const anchorContent = (
     <button
-      ref={buttonRef}
       className={`${styles.container} ${isEditing ? styles.containerActive : ''} ${className || ''} ${isColorAnimating ? styles.containerColored : ''}`}
       onClick={handleOpenEdit}
     >
@@ -76,7 +66,12 @@ export function IssueFieldRow<T = any>({
       }}
       onClose={handleClose}
       renderAnchor={(anchorProps) => (
-        <div {...anchorProps} style={{ height: containerHeight, transition: 'height 0.3s ease-in-out', overflow: 'hidden' }}>
+        <div 
+          {...anchorProps} 
+          {...containerProps}
+          className={containerProps.className}
+          style={{ ...containerProps.style, overflow: 'hidden' }}
+        >
           {description && !isEditing ? (
             <Tooltip text={description} delay="long">
               {anchorContent}
