@@ -92,7 +92,7 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
                 setAnimationState('idle');
               }, 600);
               timersRef.current.push(inTimer);
-            }, 10); // how long after container starts animating in
+            }, 200); // how long after container starts animating in
             timersRef.current.push(fieldDelayTimer);
           });
         });

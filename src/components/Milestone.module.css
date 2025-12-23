@@ -1,0 +1,8 @@
+.milestoneName {
+  font-size: var(--text-body-size-small, 12px);
+  font-weight: var(--base-text-weight-medium, 500);
+}
+
+.milestoneActive {
+    background-color: var(--control-bgColor-hover, #f6f8fa);
+}

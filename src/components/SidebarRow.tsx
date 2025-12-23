@@ -11,12 +11,13 @@ interface SidebarRowProps<T extends FieldValue = FieldValue> {
   value: T;
   type: 'text' | 'number' | 'single-select' | 'multi-select' | 'date';
   renderDisplay: (value: T) => ReactNode;
-  renderEditor: (value: T, onChange: (newValue: T) => void) => ReactNode;
+  renderEditor: (value: T, onChange: (newValue: T) => void, closeEditor: () => void) => ReactNode;
   onChange: (value: T) => void;
   onEditingChange?: (isEditing: boolean) => void;
   trailingVisual?: ReactNode;
   footer?: ReactNode;
   disableClickToEdit?: boolean;
+  noPadding?: boolean;
 }
 
 export function SidebarRow<T extends FieldValue = FieldValue>({
@@ -30,6 +31,7 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
   trailingVisual,
   footer,
   disableClickToEdit = false,
+  noPadding = false,
 }: SidebarRowProps<T>) {
   const [isEditing, setIsEditing] = useState(false);
   const [valueChangedWhileEditing, setValueChangedWhileEditing] = useState(false);
@@ -90,18 +92,18 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
         side="outside-bottom"
         align="start"
       >
-          {renderEditor(value, onChange)}
+          {renderEditor(value, onChange, () => handleEditingChange(false))}
       </AnchoredOverlay>
       <div
         {...getContainerProps()}
         onClick={() =>
           !disableClickToEdit && !isEditing && handleEditingChange(true)
         }
-        className={`${styles.clickable} ${getContainerProps().className}`}
+        className={`${!disableClickToEdit && hasValue ? styles.clickable : ''} ${getContainerProps().className}`}
         style={{ 
           ...getContainerProps().style,
           cursor: "default", 
-          padding: renderDisplay(value) ? undefined : '0',
+          padding: noPadding ? '0' : (renderDisplay(value) ? undefined : '0'),
         }}
       >
         {renderDisplay(value)}
