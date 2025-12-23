@@ -78,7 +78,18 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
         label="Engineering staffing"
         value={issue.fields?.engineeringStaffing ?? null}
         onChange={(value) => updateField("engineeringStaffing", value)}
-      />
-    </div>
+      />      
+      <IssueField_multiSelect
+        label="Tags"
+        value={issue.fields?.tags || []}
+        options={[
+          { label: 'Frontend', value: 'frontend' },
+          { label: 'Backend', value: 'backend' },
+          { label: 'Database', value: 'database' },
+          { label: 'API', value: 'api' },
+          { label: 'UI/UX', value: 'ui-ux' },
+        ]}
+        onChange={(value) => updateField('tags', value)}
+      />    </div>
   );
 }

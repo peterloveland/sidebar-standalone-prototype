@@ -17,6 +17,7 @@ export interface Issue {
     targetDate?: string;
     trending?: string;
     engineeringStaffing?: number;
+    tags?: string[];
   };
 }
 
@@ -43,6 +44,7 @@ const sampleIssues: Issue[] = [
       targetDate: '2025-12-25T00:00:00.000Z',
       trending: 'on-track',
       engineeringStaffing: 3,
+      tags: ['frontend', 'ui-ux'],
     },
   },
   {
