@@ -1,0 +1,61 @@
+import { useState, useEffect } from 'react';
+import { ActionList } from '@primer/react';
+import { IssueFieldRow } from './IssueFieldRow';
+import styles from './IssueField.module.css';
+
+interface SelectOption {
+  label: string;
+  value: string;
+}
+
+interface IssueField_singleSelectProps {
+  label: string;
+  value: string | null;
+  options: SelectOption[];
+  onChange: (value: string | null) => void;
+}
+
+export function IssueField_singleSelect({ label, value, options, onChange }: IssueField_singleSelectProps) {
+  const [localValue, setLocalValue] = useState(value);
+
+  const renderDisplay = (val: string | null) => {
+    if (!val) return <span className={styles.emptyState}>None</span>;
+    const option = options.find(opt => opt.value === val);
+    return option?.label || val;
+  };
+
+  const renderEditor = (val: string | null, onChangeCallback: (newValue: string | null) => void) => {
+    return (
+      <div style={{ width: "296px" }}>
+        <ActionList selectionVariant="single">
+          {options.map((option) => (
+            <ActionList.Item
+              key={option.value}
+              selected={localValue === option.value}
+              onSelect={() => {
+                setLocalValue(option.value);
+                onChange(option.value);
+              }}
+            >
+              {option.label}
+            </ActionList.Item>
+          ))}
+        </ActionList>
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+
+  return (
+    <IssueFieldRow
+      label={label}
+      value={value}
+      renderDisplay={renderDisplay}
+      renderEditor={renderEditor}
+      onChange={onChange}
+    />
+  );
+}

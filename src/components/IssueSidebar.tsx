@@ -2,6 +2,8 @@ import { db } from '../lib/db';
 import { AssigneeRow } from './AssigneeRow';
 import { AgentsRow } from './AgentsRow';
 import styles from './IssueSidebar.module.css';
+import { LabelsRow } from './LabelsRow';
+import { IssueFieldsContainer } from './IssueFieldsContainer';
 
 interface IssueSidebarProps {
   issueId: string;
@@ -20,8 +22,12 @@ export function IssueSidebar({ issueId }: IssueSidebarProps) {
 
   return (
     <div className={styles.container}>
-      <AssigneeRow issueId={issueId} />
-      <AgentsRow issueId={issueId} />
+      <div>
+        <AssigneeRow issueId={issueId} />
+        <AgentsRow issueId={issueId} />
+      </div>
+      <LabelsRow issueId={issueId} />
+      <IssueFieldsContainer issueId={issueId} />
     </div>
   );
 }

@@ -21,7 +21,13 @@
 .containerActive {
   background-color: var(--control-bgColor-active, #f6f8fa);
 }
+.containerNonInteractive {
+  cursor: default !important;
+}
 
+.containerNonInteractive:hover {
+  background-color: transparent;
+}
 .label {
 color: var(--fgColor-muted);
 

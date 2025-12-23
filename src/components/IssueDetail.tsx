@@ -48,7 +48,7 @@ export function IssueDetail({ issue, onToggleState, onClose }: IssueDetailProps)
       </CardHeader>
 
       <div className={styles.mainContent}>
-        <CardContent className={styles.content}>
+        {/* <CardContent className={styles.content}>
           <div className={styles.sections}>
             {issue.description && (
               <div>
@@ -127,7 +127,7 @@ export function IssueDetail({ issue, onToggleState, onClose }: IssueDetailProps)
               </Button>
             </div>
           </div>
-        </CardContent>
+        </CardContent> */}
 
         <div className={styles.sidebar}>
           <IssueSidebar issueId={issue.id} />

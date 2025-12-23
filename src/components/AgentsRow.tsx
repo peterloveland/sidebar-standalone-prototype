@@ -66,6 +66,7 @@ export function AgentsRow({ issueId }: AgentsRowProps) {
     <>
       <div className={styles.agentsRowContainer}>
         <svg
+          className={styles.agentConnector}
           width="24"
           height="32"
           viewBox="0 0 24 32"

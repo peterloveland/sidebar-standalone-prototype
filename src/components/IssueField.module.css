@@ -1,0 +1,45 @@
+.editorContainer {
+  width: 296px;
+  padding: var(--base-size-8, 0.5rem);
+}
+
+.textarea {
+  width: 100%;
+  padding: var(--base-size-8, 0.5rem);
+  border: 1px solid var(--borderColor-default, #d0d7de);
+  border-radius: var(--borderRadius-medium, 6px);
+  font-family: var(--fontStack-sansSerif, "SF Pro Text");
+  font-size: var(--text-body-size-medium, 14px);
+  line-height: var(--text-body-lineHeight-medium, 20px);
+  color: var(--fgColor-default, #1f2328);
+  resize: none;
+  overflow: hidden;
+  min-height: 32px;
+}
+
+.textarea:focus {
+  outline: 2px solid var(--focus-outlineColor, #0969da);
+  outline-offset: -1px;
+  border-color: transparent;
+}
+
+.input {
+  width: 100%;
+  padding: var(--base-size-8, 0.5rem);
+  border: 1px solid var(--borderColor-default, #d0d7de);
+  border-radius: var(--borderRadius-medium, 6px);
+  font-family: var(--fontStack-sansSerif, "SF Pro Text");
+  font-size: var(--text-body-size-medium, 14px);
+  line-height: var(--text-body-lineHeight-medium, 20px);
+  color: var(--fgColor-default, #1f2328);
+}
+
+.input:focus {
+  outline: 2px solid var(--focus-outlineColor, #0969da);
+  outline-offset: -1px;
+  border-color: transparent;
+}
+
+.emptyState {
+  color: var(--fgColor-muted, #656d76);
+}

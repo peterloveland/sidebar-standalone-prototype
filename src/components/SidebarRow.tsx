@@ -70,7 +70,7 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
           !disableClickToEdit && !isEditing && handleEditingChange(true)
         }
         className={`${styles.clickable}`}
-        style={{ cursor: "default" }}
+        style={{ cursor: "default", padding: renderDisplay(value) ? undefined : '0' }}
       >
         {renderDisplay(value)}
       </div>

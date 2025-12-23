@@ -123,12 +123,7 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
     const hasAgents = assigneesValue.some(a => AGENTS.some(agent => agent.name === a));
     
     if (assigneesValue.length === 0) {
-      return (
-        <span className={styles.emptyState}>
-          No one assigned
-          
-        </span>
-      );
+      return null;
     }
 
     // If we have agents but no human assignees
@@ -141,24 +136,28 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
     }
 
     return (
-      <div className={styles.assigneesList}>
+      <div className={styles.multipleListContainer}>
         {humanOnly.map((assignee) => {
-          const userInfo = AVAILABLE_ASSIGNEES.find(u => u.username === assignee);
+          const userInfo = AVAILABLE_ASSIGNEES.find(
+            (u) => u.username === assignee
+          );
           return (
             <div
               key={assignee}
-              ref={(el) => chipRefs.current[assignee] = el}
+              ref={(el) => (chipRefs.current[assignee] = el)}
               className={styles.assigneeChip}
               onClick={(e) => {
                 e.stopPropagation();
-                setClickedAssignee(clickedAssignee === assignee ? null : assignee);
+                setClickedAssignee(
+                  clickedAssignee === assignee ? null : assignee
+                );
               }}
-              style={{ cursor: 'pointer', position: 'relative' }}
+              style={{ cursor: "pointer", position: "relative" }}
             >
               <div className={styles.assigneeChipInner}>
                 {userInfo ? (
                   <Avatar
-                    src={userInfo.avatar} 
+                    src={userInfo.avatar}
                     alt={assignee}
                     className={styles.assigneeAvatar}
                     size={16}
@@ -170,17 +169,17 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
                 )}
                 <span className={styles.assigneeName}>{assignee}</span>
               </div>
-              
+
               {clickedAssignee === assignee && (
                 <>
-                  <div 
+                  <div
                     className={styles.hoverBackdrop}
                     onClick={(e) => {
                       e.stopPropagation();
                       setClickedAssignee(null);
                     }}
                   />
-                  <div 
+                  <div
                     className={styles.hoverCard}
                     style={{
                       top: `${hoverCardPosition.top}px`,
@@ -190,11 +189,11 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
                   >
                     <div className={styles.hoverCardHeader}>
                       {userInfo ? (
-                        <img 
-                          src={userInfo.avatar} 
+                        <img
+                          src={userInfo.avatar}
                           alt={assignee}
                           className={styles.hoverCardAvatar}
-                          style={{ objectFit: 'cover' }}
+                          style={{ objectFit: "cover" }}
                         />
                       ) : (
                         <div className={styles.hoverCardAvatar}>
@@ -362,10 +361,27 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
   const humanAssignees = assigneesValue.filter(a => !AGENTS.some(agent => agent.name === a));
   const footerContent = assigneesValue.length === 0 ? (
     <div className={styles.quickActions}>
+      {/* show assign copilot */}
       <button
         onClick={(e) => {
           e.stopPropagation();
-          toggleAssignee('peterloveland');
+          // Directly update the database
+          const humanAssignees = [...(issue.assignees || []), 'peterloveland'];
+          const agentAssignees = [...(issue.agents || []), 'copilot'];
+          db.update(issueId, { assignees: humanAssignees, agents: agentAssignees });
+          window.dispatchEvent(new Event('storage'));
+        }}
+        className={styles.quickActionButton}
+      >
+        Assign Copilot
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          // Directly update the database
+          const humanAssignees = [...(issue.assignees || []), 'peterloveland'];
+          db.update(issueId, { assignees: humanAssignees });
+          window.dispatchEvent(new Event('storage'));
         }}
         className={styles.quickActionButton}
       >
