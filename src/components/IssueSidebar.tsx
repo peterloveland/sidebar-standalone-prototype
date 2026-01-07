@@ -3,6 +3,7 @@ import { AssigneeRow } from './AssigneeRow';
 import { AgentsRow } from './AgentsRow';
 import styles from './IssueSidebar.module.css';
 import { LabelsRow } from './LabelsRow';
+import { ProjectsRow } from './ProjectsRow';
 import { MilestonesRow } from './MilestonesRow';
 import { IssueFieldsContainer } from './IssueFieldsContainer';
 import { HeightAnimationDemo } from './HeightAnimationDemo';
@@ -30,6 +31,7 @@ export function IssueSidebar({ issueId }: IssueSidebarProps) {
       </div>
       <LabelsRow issueId={issueId} />
       <IssueFieldsContainer issueId={issueId} />
+      <ProjectsRow issueId={issueId} />
       <MilestonesRow issueId={issueId} />
     </div>
   );
