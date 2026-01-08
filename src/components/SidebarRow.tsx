@@ -10,7 +10,7 @@ interface SidebarRowProps<T extends FieldValue = FieldValue> {
   label: string;
   value: T;
   type: 'text' | 'number' | 'single-select' | 'multi-select' | 'date';
-  renderDisplay: (value: T) => ReactNode;
+  renderDisplay: (value: T, onChange: (newValue: T) => void, openEditor: () => void) => ReactNode;
   renderEditor: (value: T, onChange: (newValue: T) => void, closeEditor: () => void) => ReactNode;
   onChange: (value: T) => void;
   onEditingChange?: (isEditing: boolean) => void;
@@ -103,10 +103,10 @@ export function SidebarRow<T extends FieldValue = FieldValue>({
         style={{ 
           ...getContainerProps().style,
           cursor: "default", 
-          padding: noPadding ? '0' : (renderDisplay(value) ? undefined : '0'),
+          padding: noPadding ? '0' : (renderDisplay(value, onChange, () => handleEditingChange(true)) ? undefined : '0'),
         }}
       >
-        {renderDisplay(value)}
+        {renderDisplay(value, onChange, () => handleEditingChange(true))}
       </div>
       {footer && <div className={styles.footer}>{footer}</div>}
     </div>

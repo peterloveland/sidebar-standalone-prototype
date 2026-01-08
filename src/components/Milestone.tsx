@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ActionList, AnchoredOverlay } from '@primer/react';
-import { Eye, X } from 'lucide-react';
 import styles from './Milestone.module.css';
 
 interface MilestoneProps {
@@ -8,6 +7,7 @@ interface MilestoneProps {
   color?: string;
   onRemove?: () => void;
   onView?: () => void;
+  onChangeMilestone?: () => void;
 }
 
 // Milestone icon component (partial circle)
@@ -22,7 +22,7 @@ const MilestoneIcon = ({ color = '#8b5cf6', size = 20 }: { color?: string; size?
   </svg>
 );
 
-export function Milestone({ name, color = '#8b5cf6', onRemove, onView }: MilestoneProps) {
+export function Milestone({ name, color = '#8b5cf6', onRemove, onView, onChangeMilestone }: MilestoneProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -51,10 +51,17 @@ export function Milestone({ name, color = '#8b5cf6', onRemove, onView }: Milesto
               setIsOpen(false);
             }}
           >
-            <ActionList.LeadingVisual>
-              <Eye size={16} />
-            </ActionList.LeadingVisual>
             View milestone
+          </ActionList.Item>
+        )}
+        {onChangeMilestone && (
+          <ActionList.Item
+            onSelect={() => {
+              onChangeMilestone();
+              setIsOpen(false);
+            }}
+          >
+            Change milestone
           </ActionList.Item>
         )}
         {onRemove && (
@@ -65,9 +72,6 @@ export function Milestone({ name, color = '#8b5cf6', onRemove, onView }: Milesto
               setIsOpen(false);
             }}
           >
-            <ActionList.LeadingVisual>
-              <X size={16} />
-            </ActionList.LeadingVisual>
             Remove milestone
           </ActionList.Item>
         )}

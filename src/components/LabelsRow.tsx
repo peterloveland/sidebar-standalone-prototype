@@ -88,7 +88,7 @@ export function LabelsRow({ issueId }: LabelsRowProps) {
   };
 
   // Render display function
-  const renderDisplay = (labels: string[]) => {
+  const renderDisplay = (labels: string[], _onChange: (val: string[]) => void, _openEditor: () => void) => {
     if (labels.length === 0) {
       return null;
     }

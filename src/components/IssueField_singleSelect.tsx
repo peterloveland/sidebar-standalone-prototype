@@ -24,7 +24,7 @@ interface IssueField_singleSelectProps {
 export function IssueField_singleSelect({ label, value, options, onChange, description, isColorAnimating = false }: IssueField_singleSelectProps) {
   const [localValue, setLocalValue] = useState(value);
 
-  const renderDisplay = (val: string | null) => {
+  const renderDisplay = (val: string | null, _onChange: (val: string | null) => void, _openEditor: () => void) => {
     if (!val) return <span className={styles.emptyState}>None</span>;
     const option = options.find(opt => opt.value === val);
     if (!option) return val;

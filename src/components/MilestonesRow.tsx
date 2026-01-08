@@ -67,7 +67,7 @@ export function MilestonesRow({ issueId }: MilestonesRowProps) {
   };
 
   // Render display function
-  const renderDisplay = (value: string | null) => {
+  const renderDisplay = (value: string | null, _onChange: (newValue: string | null) => void, openEditor: () => void) => {
     if (!value) {
       return null;
     }
@@ -81,6 +81,9 @@ export function MilestonesRow({ issueId }: MilestonesRowProps) {
         onView={() => {
           // TODO: Navigate to milestone or show details
           console.log('View milestone:', value);
+        }}
+        onChangeMilestone={() => {
+          openEditor();
         }}
         onRemove={() => {
           db.update(issueId, { milestone: null } as any);

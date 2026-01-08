@@ -119,7 +119,7 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
   };
 
   // Render display function
-  const renderDisplay = (assignees: string[]) => {
+  const renderDisplay = (assignees: string[], _onChange: (val: string[]) => void, _openEditor: () => void) => {
     // Only show human assignees in the display (agents shown separately)
     const humanOnly = assigneesValue.filter(a => !AGENTS.some(agent => agent.name === a));
     const hasAgents = assigneesValue.some(a => AGENTS.some(agent => agent.name === a));

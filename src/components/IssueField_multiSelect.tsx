@@ -36,7 +36,7 @@ export function IssueField_multiSelect({ label, value, options, onChange, descri
     }
   };
 
-  const renderDisplay = (val: string[]) => {
+  const renderDisplay = (val: string[], _onChange: (val: string[]) => void, _openEditor: () => void) => {
     if (!val || val.length === 0) return <span className={styles.emptyState}>None</span>;
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
