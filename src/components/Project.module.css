@@ -121,4 +121,5 @@
   display: flex;
   justify-content: space-between;
   gap: var(--base-size-8);
+  margin-top: var(--base-size-8);
 }

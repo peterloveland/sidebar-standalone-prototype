@@ -76,6 +76,16 @@ export function ProjectsRow({ issueId }: ProjectsRowProps) {
     setSearchQuery('');
   };
 
+  const handleToggleProject = (projectId: string) => {
+    const isSelected = projects.some(p => p.id === projectId);
+    if (isSelected) {
+      db.removeIssueFromProject(projectId, issueId);
+    } else {
+      db.addIssueToProject(projectId, issueId);
+    }
+    window.dispatchEvent(new Event('storage'));
+  };
+
   const handleRemoveProject = (projectId: string) => {
     db.removeIssueFromProject(projectId, issueId);
     window.dispatchEvent(new Event('storage'));
@@ -124,25 +134,27 @@ export function ProjectsRow({ issueId }: ProjectsRowProps) {
                 block
               />
             </div>
-            <ActionList>
-              {filteredProjects.length === 0 ? (
+            <ActionList selectionVariant="multiple">
+              {allProjects
+                .filter(project => project.title.toLowerCase().includes(searchQuery.toLowerCase()))
+                .map((project) => {
+                  const isSelected = projects.some(p => p.id === project.id);
+                  return (
+                    <ActionList.Item
+                      key={project.id}
+                      selected={isSelected}
+                      role="menuitemcheckbox"
+                      aria-checked={isSelected}
+                      onSelect={() => handleToggleProject(project.id)}
+                    >
+                      {project.title}
+                    </ActionList.Item>
+                  );
+                })}
+              {allProjects.filter(project => project.title.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
                 <ActionList.Item disabled>
-                  {availableProjects.length === 0 
-                    ? 'All projects added' 
-                    : 'No matching projects'}
+                  No matching projects
                 </ActionList.Item>
-              ) : (
-                filteredProjects.map((project) => (
-                  <ActionList.Item
-                    key={project.id}
-                    onSelect={() => handleAddProject(project.id)}
-                  >
-                    <ActionList.LeadingVisual>
-                      <Plus size={16} />
-                    </ActionList.LeadingVisual>
-                    {project.title}
-                  </ActionList.Item>
-                ))
               )}
             </ActionList>
           </div>
@@ -234,9 +246,9 @@ export function ProjectsRow({ issueId }: ProjectsRowProps) {
 
               <IconButton
                 onClick={() => handleRemoveProject(project.id)}
-                size="small" icon={ArrowUpRight} aria-label={'Go to project'}>
-                Remove from project
-              </IconButton>
+                size="small" icon={ArrowUpRight} aria-label={'Go to project'} 
+                tooltip='Go to project'
+              />
             </div>
         </div>
       </div>

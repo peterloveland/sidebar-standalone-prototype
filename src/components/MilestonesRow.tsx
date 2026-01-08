@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import { ActionList } from '@primer/react';
+import { ActionList, TextInput } from '@primer/react';
 import { SidebarRow } from './SidebarRow';
 import { Milestone } from './Milestone';
 import { db } from '../lib/db';
@@ -33,6 +33,7 @@ const MilestoneIcon = ({ color = '#8b5cf6', size = 20 }: { color?: string; size?
 
 export function MilestonesRow({ issueId }: MilestonesRowProps) {
   const [localMilestone, setLocalMilestone] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const issue = db.getById(issueId);
 
   if (!issue) {
@@ -46,12 +47,14 @@ export function MilestonesRow({ issueId }: MilestonesRowProps) {
     if (isEditing) {
       // When opening, set local state to current value
       setLocalMilestone(milestoneValue);
+      setSearchQuery('');
     } else {
       // When closing, save to database if changed
       if (localMilestone !== milestoneValue) {
         db.update(issueId, { milestone: localMilestone } as any);
         window.dispatchEvent(new Event('storage'));
       }
+      setSearchQuery('');
     }
   };
 
@@ -89,29 +92,44 @@ export function MilestonesRow({ issueId }: MilestonesRowProps) {
 
   // Render editor function
   const renderEditor = (value: string | null, onChange: (newValue: string | null) => void, closeEditor: () => void) => {
+    const filteredMilestones = AVAILABLE_MILESTONES.filter(milestone =>
+      milestone.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
       <div style={{ width: "296px" }}>
+        <div style={{ padding: '8px' }}>
+          <TextInput
+            placeholder="Search milestones..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            autoFocus
+            block
+          />
+        </div>
         <ActionList selectionVariant="single">
           {/* Clear selection option */}
-          <ActionList.Item
-            key="__clear__"
-            onSelect={() => {
-              db.update(issueId, { milestone: null } as any);
-              window.dispatchEvent(new Event('storage'));
-              closeEditor();
-            }}
-            role="menuitemradio"
-            selected={localMilestone === null}
-            aria-checked={localMilestone === null}
-          >
-            <ActionList.LeadingVisual>
-              <X size={16} />
-            </ActionList.LeadingVisual>
-            Clear milestone
-          </ActionList.Item>
+          {(!searchQuery || 'clear milestone'.includes(searchQuery.toLowerCase())) && (
+            <ActionList.Item
+              key="__clear__"
+              onSelect={() => {
+                db.update(issueId, { milestone: null } as any);
+                window.dispatchEvent(new Event('storage'));
+                closeEditor();
+              }}
+              role="menuitemradio"
+              selected={localMilestone === null}
+              aria-checked={localMilestone === null}
+            >
+              <ActionList.LeadingVisual>
+                <X size={16} />
+              </ActionList.LeadingVisual>
+              Clear milestone
+            </ActionList.Item>
+          )}
           
           {/* Milestone options */}
-          {AVAILABLE_MILESTONES.map((milestone) => (
+          {filteredMilestones.map((milestone) => (
             <ActionList.Item
               key={milestone.name}
               onSelect={() => {
@@ -129,6 +147,11 @@ export function MilestonesRow({ issueId }: MilestonesRowProps) {
               {milestone.name}
             </ActionList.Item>
           ))}
+          {filteredMilestones.length === 0 && searchQuery && (
+            <ActionList.Item disabled>
+              No matching milestones
+            </ActionList.Item>
+          )}
         </ActionList>
       </div>
     );
