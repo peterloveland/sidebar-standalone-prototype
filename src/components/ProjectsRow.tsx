@@ -166,7 +166,7 @@ export function ProjectsRow({ issueId }: ProjectsRowProps) {
               No projects
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               {projects.map((project) => (
                 <Project
                   key={project.id}
