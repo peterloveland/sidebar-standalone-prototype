@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { User, X, Settings } from 'lucide-react';
 import { PlusIcon, AgentIcon } from '@primer/octicons-react';
-import { ActionList, Avatar, IconButton } from '@primer/react';
+import { ActionList, Avatar, IconButton, CounterLabel } from '@primer/react';
 import { SidebarRow } from './SidebarRow';
+import { CreateAgentSessionDialog } from './CreateAgentSessionDialog';
 import { db } from '../lib/db';
 import styles from './IssueSidebar.module.css';
 
@@ -44,6 +45,7 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
   const [clickedAssignee, setClickedAssignee] = useState<string | null>(null);
   const [localAssignees, setLocalAssignees] = useState<string[]>([]);
   const [hoverCardPosition, setHoverCardPosition] = useState({ top: 0, left: 0 });
+  const [isCreateSessionDialogOpen, setIsCreateSessionDialogOpen] = useState(false);
   const chipRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const prevAssigneesRef = useRef<string[]>([]);
   const newAssigneeIndicesRef = useRef<Map<string, number>>(new Map());
@@ -66,8 +68,30 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
   // Combine assignees and agents for editing
   const assigneesValue = [...(issue.assignees || []), ...(issue.agents || [])];
 
-  const handleCreateCustomSession = () => {
-    alert('Create a new custom agent session');
+  const handleCloseCreateSessionDialog = useCallback(() => {
+    setIsCreateSessionDialogOpen(false);
+  }, []);
+
+  const handleSubmitCustomSession = (data: { instructions: string; repo: string; branch: string; agent: string }) => {
+    // Save custom session to localStorage
+    const existingSessions = getCustomSessions();
+    const newSession = {
+      id: `session-${Date.now()}`,
+      instructions: data.instructions,
+      repo: data.repo,
+      branch: data.branch,
+      agent: data.agent,
+      createdAt: Date.now(),
+      status: 'running' as const,
+      progress: Math.floor(Math.random() * 50) + 10,
+    };
+    const updatedSessions = [...existingSessions, newSession];
+    try {
+      localStorage.setItem(`issue-custom-sessions-${issueId}`, JSON.stringify(updatedSessions));
+      window.dispatchEvent(new Event('storage'));
+    } catch (error) {
+      console.error('Error saving custom session:', error);
+    }
   };
 
   const handleEditingChange = (isEditing: boolean) => {
@@ -252,14 +276,43 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
     );
   };
 
+  // Get custom sessions from localStorage to count active sessions per agent
+  const getCustomSessions = () => {
+    try {
+      const data = localStorage.getItem(`issue-custom-sessions-${issueId}`);
+      if (data) {
+        return JSON.parse(data);
+      }
+    } catch (error) {
+      console.error('Error reading custom sessions:', error);
+    }
+    return [];
+  };
+
+  // Count sessions for a specific agent
+  const getAgentSessionCount = (agentName: string) => {
+    const customSessions = getCustomSessions();
+    const customSessionCount = customSessions.filter(
+      (s: { agent: string; status: string }) => s.agent === agentName && s.status === 'running'
+    ).length;
+    // Also count if this agent is assigned to the issue (represents an active session)
+    const isAssignedToIssue = (issue?.agents || []).includes(agentName) ? 1 : 0;
+    return customSessionCount + isAssignedToIssue;
+  };
+
   // Render editor function
-  const renderEditor = (assignees: string[]) => {
+  const renderEditor = (assignees: string[], _onChange: (val: string[]) => void, closeEditor: () => void) => {
     // Use assigneesValue (initial state) for grouping, not localAssignees
     // This prevents items from moving until the dialog closes
     const selectedAgents = AGENTS.filter(agent => assigneesValue.includes(agent.name));
     const selectedUsers = AVAILABLE_ASSIGNEES.filter(user => assigneesValue.includes(user.username));
     const unselectedAgents = AGENTS.filter(agent => !assigneesValue.includes(agent.name));
     const unselectedUsers = AVAILABLE_ASSIGNEES.filter(user => !assigneesValue.includes(user.username));
+
+    const handleOpenCreateSession = () => {
+      closeEditor();
+      setIsCreateSessionDialogOpen(true);
+    };
     
     return (
       <div style={{ width: "296px" }}>
@@ -288,28 +341,36 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
                 {user.username}
               </ActionList.Item>
             ))}
-            {selectedAgents.map((agent) => (
-              <ActionList.Item
-                key={agent.name}
-                role="menuitemradio"
-                selected={isAssigned(agent.name)}
-                aria-checked={isAssigned(agent.name)}
-                onSelect={() => toggleAssignee(agent.name)}
-              >
-                <ActionList.LeadingVisual>
-                  <img
-                    src={agent.avatar}
-                    alt={agent.name}
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </ActionList.LeadingVisual>
-                {agent.name}
-              </ActionList.Item>
-            ))}
+            {selectedAgents.map((agent) => {
+              const sessionCount = getAgentSessionCount(agent.name);
+              return (
+                <ActionList.Item
+                  key={agent.name}
+                  role="menuitemradio"
+                  selected={isAssigned(agent.name)}
+                  aria-checked={isAssigned(agent.name)}
+                  onSelect={() => toggleAssignee(agent.name)}
+                >
+                  <ActionList.LeadingVisual>
+                    <img
+                      src={agent.avatar}
+                      alt={agent.name}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "50%",
+                      }}
+                    />
+                  </ActionList.LeadingVisual>
+                  {agent.name}
+                  {sessionCount > 0 && (
+                    <ActionList.TrailingVisual>
+                      <CounterLabel>{sessionCount}</CounterLabel>
+                    </ActionList.TrailingVisual>
+                  )}
+                </ActionList.Item>
+              );
+            })}
           </ActionList>
         )}
 
@@ -319,35 +380,43 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
             <ActionList.GroupHeading as="h3">Agents</ActionList.GroupHeading>
             <div
               className={styles.customAgentCTA}
-              onClick={handleCreateCustomSession}
+              onClick={handleOpenCreateSession}
               style={{ cursor: "pointer" }}
             >
               Create new
             </div>
           </div>
           {unselectedAgents.length > 0 ? (
-            unselectedAgents.map((agent) => (
-              <ActionList.Item
-                selected={isAssigned(agent.name)}
-                role="menuitemradio"
-                aria-checked={isAssigned(agent.name)}
-                key={agent.name}
-                onSelect={() => toggleAssignee(agent.name)}
-              >
-                <ActionList.LeadingVisual>
-                  <img
-                    src={agent.avatar}
-                    alt={agent.name}
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </ActionList.LeadingVisual>
-                {agent.name}
-              </ActionList.Item>
-            ))
+            unselectedAgents.map((agent) => {
+              const sessionCount = getAgentSessionCount(agent.name);
+              return (
+                <ActionList.Item
+                  selected={isAssigned(agent.name)}
+                  role="menuitemradio"
+                  aria-checked={isAssigned(agent.name)}
+                  key={agent.name}
+                  onSelect={() => toggleAssignee(agent.name)}
+                >
+                  <ActionList.LeadingVisual>
+                    <img
+                      src={agent.avatar}
+                      alt={agent.name}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "50%",
+                      }}
+                    />
+                  </ActionList.LeadingVisual>
+                  {agent.name}
+                  {sessionCount > 0 && (
+                    <ActionList.TrailingVisual>
+                      <CounterLabel>{sessionCount}</CounterLabel>
+                    </ActionList.TrailingVisual>
+                  )}
+                </ActionList.Item>
+              );
+            })
           ) : (
             <div
               style={{
@@ -356,7 +425,7 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
                 color: "var(--fgColor-muted, #656d76)",
                 cursor: "pointer",
               }}
-              onClick={handleCreateCustomSession}
+              onClick={handleOpenCreateSession}
             >
               All agents already assigned. Create a new custom session
             </div>
@@ -419,18 +488,25 @@ export function AssigneeRow({ issueId }: AssigneeRowProps) {
   ) : undefined;
 
   return (
-    <SidebarRow
-      label="Assignees"
-      value={assigneesValue}
-      type="multi-select"
-      renderDisplay={renderDisplay}
-      renderEditor={renderEditor}
-      onChange={(newAssignees) => {
-        setLocalAssignees(newAssignees);
-      }}
-      onEditingChange={handleEditingChange}
-      footer={footerContent}
-      // disableClickToEdit={true}
-    />
+    <>
+      <SidebarRow
+        label="Assignees"
+        value={assigneesValue}
+        type="multi-select"
+        renderDisplay={renderDisplay}
+        renderEditor={renderEditor}
+        onChange={(newAssignees) => {
+          setLocalAssignees(newAssignees);
+        }}
+        onEditingChange={handleEditingChange}
+        footer={footerContent}
+        // disableClickToEdit={true}
+      />
+      <CreateAgentSessionDialog
+        isOpen={isCreateSessionDialogOpen}
+        onClose={handleCloseCreateSessionDialog}
+        onSubmit={handleSubmitCustomSession}
+      />
+    </>
   );
 }
