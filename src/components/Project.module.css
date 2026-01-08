@@ -2,11 +2,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2px 12px;
+  padding: 4px 8px;
   padding-right: 2px;
   cursor: pointer;
   border-radius: 6px;
-  transition: background-color 0.1s ease;
   gap: 8px;
   overflow: visible;
   position: relative;
@@ -19,7 +18,7 @@
 
 .leftSection {
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 8px;
   flex: 1;
   min-width: 0;
@@ -30,10 +29,11 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: var(--base-text-weight-medium, 500);
   color: var(--fgColor-default);
   overflow: hidden;

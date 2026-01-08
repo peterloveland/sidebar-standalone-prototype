@@ -17,29 +17,30 @@ interface RelatedIssue {
   number: number;
   title: string;
   state: 'open' | 'closed';
+  repo?: string;
 }
 
 // 20 fake issues for relationship selection
 const AVAILABLE_ISSUES: RelatedIssue[] = [
-  { id: 'rel-1', number: 101, title: 'Implement user authentication flow', state: 'open' },
+  { id: 'rel-1', number: 101, title: 'Implement user authentication flow', state: 'open', repo: 'acme/auth-service' },
   { id: 'rel-2', number: 102, title: 'Design system component library', state: 'open' },
-  { id: 'rel-3', number: 103, title: 'API rate limiting implementation', state: 'open' },
+  { id: 'rel-3', number: 103, title: 'API rate limiting implementation', state: 'open', repo: 'acme/api-gateway' },
   { id: 'rel-4', number: 104, title: 'Database schema migration', state: 'closed' },
-  { id: 'rel-5', number: 105, title: 'Add unit tests for core modules', state: 'open' },
+  { id: 'rel-5', number: 105, title: 'Add unit tests for core modules', state: 'open', repo: 'acme/core-lib' },
   { id: 'rel-6', number: 106, title: 'Refactor legacy payment system', state: 'open' },
-  { id: 'rel-7', number: 107, title: 'Implement SSO integration', state: 'open' },
+  { id: 'rel-7', number: 107, title: 'Implement SSO integration', state: 'open', repo: 'acme/identity' },
   { id: 'rel-8', number: 108, title: 'Mobile responsive redesign', state: 'closed' },
-  { id: 'rel-9', number: 109, title: 'Performance optimization for dashboard', state: 'open' },
+  { id: 'rel-9', number: 109, title: 'Performance optimization for dashboard', state: 'open', repo: 'acme/dashboard' },
   { id: 'rel-10', number: 110, title: 'Add analytics tracking', state: 'open' },
-  { id: 'rel-11', number: 111, title: 'Implement notification system', state: 'open' },
+  { id: 'rel-11', number: 111, title: 'Implement notification system', state: 'open', repo: 'acme/notifications' },
   { id: 'rel-12', number: 112, title: 'User profile page redesign', state: 'closed' },
-  { id: 'rel-13', number: 113, title: 'Add export to CSV feature', state: 'open' },
+  { id: 'rel-13', number: 113, title: 'Add export to CSV feature', state: 'open', repo: 'acme/data-tools' },
   { id: 'rel-14', number: 114, title: 'Implement search functionality', state: 'open' },
-  { id: 'rel-15', number: 115, title: 'Dark mode improvements', state: 'open' },
+  { id: 'rel-15', number: 115, title: 'Dark mode improvements', state: 'open', repo: 'acme/ui-kit' },
   { id: 'rel-16', number: 116, title: 'Accessibility audit fixes', state: 'open' },
-  { id: 'rel-17', number: 117, title: 'Add keyboard shortcuts', state: 'closed' },
+  { id: 'rel-17', number: 117, title: 'Add keyboard shortcuts', state: 'closed', repo: 'acme/shortcuts' },
   { id: 'rel-18', number: 118, title: 'Implement undo/redo functionality', state: 'open' },
-  { id: 'rel-19', number: 119, title: 'File upload optimization', state: 'open' },
+  { id: 'rel-19', number: 119, title: 'File upload optimization', state: 'open', repo: 'acme/storage' },
   { id: 'rel-20', number: 120, title: 'WebSocket real-time updates', state: 'open' },
 ];
 
@@ -229,9 +230,16 @@ export function RelationshipsRow({ issueId }: RelationshipsRowProps) {
                   <IssueClosedIcon size={16} />
                 )}
               </div>
-              <span className={styles.title}>
-                #{relatedIssue.number} {relatedIssue.title}
-              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                <span className={styles.title}>
+                  {relatedIssue.title} <span style={{ fontWeight: 'normal', color: 'var(--fgColor-muted)' }}>#{relatedIssue.id.replace('rel-', '')}</span>
+                </span>
+                {relatedIssue.repo && (
+                  <span style={{ fontSize: '12px', color: 'var(--fgColor-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {relatedIssue.repo}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -277,8 +285,7 @@ export function RelationshipsRow({ issueId }: RelationshipsRowProps) {
         fontSize: '12px',
         fontWeight: 600,
         color: 'var(--fgColor-muted)',
-        marginTop: '8px',
-        padding: '2px 12px',
+        padding: '2px 8px',
         minHeight: '32px',
         cursor: 'pointer',
         borderRadius: '6px',
@@ -505,22 +512,22 @@ export function RelationshipsRow({ issueId }: RelationshipsRowProps) {
         ) : (
           <>
             {relationships.parent && (
-              <>
+              <div style={{ marginBottom: '4px' }}>
                 {renderSectionHeading('Parent', 'parent')}
                 {renderRelationshipItem(relationships.parent, 'parent')}
-              </>
+              </div>
             )}
             {relationships.blockedBy.length > 0 && (
-              <>
+              <div style={{ marginBottom: '4px' }}>
                 {renderSectionHeading('Blocked by', 'blocked-by')}
                 {renderRelationshipGroup(relationships.blockedBy, 'blocked-by')}
-              </>
+              </div>
             )}
             {relationships.blocking.length > 0 && (
-              <>
+              <div style={{ marginBottom: '4px' }}>
                 {renderSectionHeading('Blocking', 'blocking')}
                 {renderRelationshipGroup(relationships.blocking, 'blocking')}
-              </>
+              </div>
             )}
           </>
         )}
