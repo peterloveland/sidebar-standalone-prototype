@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { AgentIcon, PlusIcon } from '@primer/octicons-react';
+import { PlusIcon } from '@primer/octicons-react';
 import { Loader2 } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { Avatar, AvatarStack, IconButton } from '@primer/react';
 import { db } from '../lib/db';
+import { AGENTS, getAgentByName } from '../lib/agents';
 import { CreateAgentSessionDialog } from './CreateAgentSessionDialog';
+import { AgentSessionProgressCard } from './AgentSessionProgressCard';
 import styles from './IssueSidebar.module.css';
 
 interface AgentsRowProps {
@@ -21,23 +23,6 @@ interface CustomSession {
   status: 'running' | 'completed' | 'failed';
   progress: number;
 }
-
-const AGENTS = [
-  {
-    name: "copilot",
-    avatar:
-      "https://external-preview.redd.it/github-copilot-with-microsoft-visual-studio-v0-6tu2QwvAliANk-cC4Is_8PFPrwxeHeFj_e-fBW9JbCo.jpg?auto=webp&s=e97e278492dd12ee674e710b4931580f4fb66351",
-  },
-  {
-    name: "claude",
-    avatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtUnGYPe67wuzVDjTujZ21UV38Y6KQ290fow&s",
-  },
-  {
-    name: "codex",
-    avatar: "https://github.com/openai.png",
-  },
-];
 
 const CUSTOM_SESSIONS_KEY_PREFIX = 'issue-custom-sessions-';
 
@@ -283,152 +268,35 @@ export function AgentsRow({ issueId }: AgentsRowProps) {
                   gap: "var(--base-size-12, 0.75rem)",
                 }}
               >
-                {agentsValue.map((agent, index) => (
-                  <div
-                    key={agent}
-                    style={{
-                      border:
-                        "var(--borderWidth-thin, 1px) solid var(--borderColor-default, #d0d7de)",
-                      borderRadius: "var(--borderRadius-medium, 6px)",
-                      padding: "var(--base-size-12, 0.75rem)",
-                      backgroundColor: "var(--bgColor-muted, #f6f8fa)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "var(--base-size-8, 0.5rem)",
-                        marginBottom: "var(--base-size-8, 0.5rem)",
-                      }}
-                    >
-                      <AgentIcon size={16} />
-                      <div style={{ flex: 1 }}>
-                        <div
-                          style={{
-                            fontWeight: "var(--base-text-weight-medium, 500)",
-                            fontSize: "var(--text-body-size-small, 0.875rem)",
-                          }}
-                        >
-                          {issue.title}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "var(--text-body-size-small, 0.75rem)",
-                            color: "var(--fgColor-muted, #656d76)",
-                          }}
-                        >
-                          {agent.charAt(0).toUpperCase() + agent.slice(1)} •{" "}
-                          {index === 0 ? "6m 14s" : "2s"}
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "var(--text-body-size-small, 0.75rem)",
-                        color: "var(--fgColor-muted, #656d76)",
-                        marginBottom: "var(--base-size-8, 0.5rem)",
-                      }}
-                    >
-                      Running test suites
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "4px",
-                        backgroundColor: "var(--borderColor-default, #d0d7de)",
-                        borderRadius: "2px",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: index === 0 ? "60%" : "75%",
-                          height: "100%",
-                          backgroundColor: "var(--fgColor-accent, #0969da)",
-                          transition: "width 0.3s",
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
+                {agentsValue.map((agent, index) => {
+                  const agentInfo = getAgentByName(agent);
+                  return (
+                    <AgentSessionProgressCard
+                      key={agent}
+                      title={issue.title}
+                      subtitle={`${agent.charAt(0).toUpperCase() + agent.slice(1)} • ${index === 0 ? "6m 14s" : "2s"}`}
+                      description="Running test suites"
+                      progress={index === 0 ? 60 : 75}
+                      status="running"
+                      avatar={agentInfo?.avatar}
+                    />
+                  );
+                })}
 
-                {customSessions.map((session) => (
-                  <div
-                    key={session.id}
-                    style={{
-                      border:
-                        "var(--borderWidth-thin, 1px) solid var(--borderColor-default, #d0d7de)",
-                      borderRadius: "var(--borderRadius-medium, 6px)",
-                      padding: "var(--base-size-12, 0.75rem)",
-                      backgroundColor: "var(--bgColor-muted, #f6f8fa)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "var(--base-size-8, 0.5rem)",
-                        marginBottom: "var(--base-size-8, 0.5rem)",
-                      }}
-                    >
-                      <AgentIcon size={16} />
-                      <div style={{ flex: 1 }}>
-                        <div
-                          style={{
-                            fontWeight: "var(--base-text-weight-medium, 500)",
-                            fontSize: "var(--text-body-size-small, 0.875rem)",
-                          }}
-                        >
-                          {session.repo} / {session.branch}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "var(--text-body-size-small, 0.75rem)",
-                            color: "var(--fgColor-muted, #656d76)",
-                          }}
-                        >
-                          {session.agent.charAt(0).toUpperCase() + session.agent.slice(1)} •{" "}
-                          {Math.floor((Date.now() - session.createdAt) / 1000)}s
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "var(--text-body-size-small, 0.75rem)",
-                        color: "var(--fgColor-muted, #656d76)",
-                        marginBottom: "var(--base-size-8, 0.5rem)",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {session.instructions}
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "4px",
-                        backgroundColor: "var(--borderColor-default, #d0d7de)",
-                        borderRadius: "2px",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: `${session.progress}%`,
-                          height: "100%",
-                          backgroundColor: session.status === 'running' 
-                            ? "var(--fgColor-accent, #0969da)"
-                            : session.status === 'completed'
-                            ? "var(--fgColor-success, #1a7f37)"
-                            : "var(--fgColor-danger, #cf222e)",
-                          transition: "width 0.3s",
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
+                {customSessions.map((session) => {
+                  const agentInfo = getAgentByName(session.agent);
+                  return (
+                    <AgentSessionProgressCard
+                      key={session.id}
+                      title={`${session.repo} / ${session.branch}`}
+                      subtitle={`${session.agent.charAt(0).toUpperCase() + session.agent.slice(1)} • ${Math.floor((Date.now() - session.createdAt) / 1000)}s`}
+                      description={session.instructions}
+                      progress={session.progress}
+                      status={session.status}
+                      avatar={agentInfo?.avatar}
+                    />
+                  );
+                })}
               </div>
             </div>
           </>,

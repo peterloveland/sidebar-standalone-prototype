@@ -8,6 +8,8 @@ import { db, type FieldDefinition } from '../lib/db';
 import { useState, useEffect, useRef } from 'react';
 import styles from './IssueFieldsContainer.module.css';
 import { useHeightAnimation } from '../hooks/useHeightAnimation';
+import { EyeIcon } from '@primer/octicons-react';
+import { CounterLabel } from '@primer/react';
 
 interface IssueFieldsContainerProps {
   issueId: string;
@@ -239,17 +241,39 @@ export function IssueFieldsContainer({ issueId }: IssueFieldsContainerProps) {
         className={`${styles.fieldsContainer} ${containerProps.className}`}
       >
         {fields.map((field, index) => (
-          <div
-            key={`${displayType}-${field.id}`}
-            className={getFieldClassName()}
-            style={{
-              animationPlayState: animationState === 'in' && !showFieldAnimations ? 'paused' : 'running',
-              animationDelay: `${index * 20}ms`,
-              ...getColorVariable()
-            }}
-          >
-            {renderField(field)}
-          </div>
+          <>
+            {index === fields.length - 2 && (
+              <div className={styles.publicFieldGroup}>
+                <div className={styles.publicFieldLabel}>Visible to everyone</div>
+                {fields.slice(-2).map((lastField, lastIndex) => (
+                  <div
+                    key={`${displayType}-${lastField.id}`}
+                    className={getFieldClassName()}
+                    style={{
+                      animationPlayState: animationState === 'in' && !showFieldAnimations ? 'paused' : 'running',
+                      animationDelay: `${(fields.length - 2 + lastIndex) * 20}ms`,
+                      ...getColorVariable()
+                    }}
+                  >
+                    {renderField(lastField)}
+                  </div>
+                ))}
+              </div>
+            )}
+            {index < fields.length - 2 && (
+              <div
+                key={`${displayType}-${field.id}`}
+                className={getFieldClassName()}
+                style={{
+                  animationPlayState: animationState === 'in' && !showFieldAnimations ? 'paused' : 'running',
+                  animationDelay: `${index * 20}ms`,
+                  ...getColorVariable()
+                }}
+              >
+                {renderField(field)}
+              </div>
+            )}
+          </>
         ))}
       </div>
     </div>

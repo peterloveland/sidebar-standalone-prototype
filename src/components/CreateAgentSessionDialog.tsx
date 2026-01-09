@@ -2,11 +2,13 @@ import { useState, useCallback } from 'react';
 import { Textarea, ActionMenu, ActionList } from '@primer/react';
 import { Dialog } from '@primer/react/experimental';
 import { RepoIcon, GitBranchIcon } from '@primer/octicons-react';
+import { AGENTS, getAgentById } from '../lib/agents';
 
 interface CreateAgentSessionDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit?: (data: { instructions: string; repo: string; branch: string; agent: string }) => void;
+  defaultAgent?: string;
 }
 
 const REPOS = [
@@ -22,25 +24,28 @@ const BRANCHES = [
   { id: 'feature/auth', name: 'feature/auth' },
 ];
 
-const AGENTS = [
-  { id: 'copilot', name: 'Copilot', model: 'gpt-4.5', avatar: 'https://github.com/github.png' },
-  { id: 'claude', name: 'Claude', model: 'sonnet-4.5', avatar: 'https://github.com/anthropics.png' },
-  { id: 'codex', name: 'Codex', model: 'codex-2', avatar: 'https://github.com/openai.png' },
-];
+export function CreateAgentSessionDialog({ isOpen, onClose, onSubmit, defaultAgent }: CreateAgentSessionDialogProps) {
+  const getInitialAgent = () => {
+    if (defaultAgent) {
+      const found = getAgentById(defaultAgent);
+      if (found) return found;
+    }
+    return AGENTS[1]; // Default to Claude
+  };
 
-export function CreateAgentSessionDialog({ isOpen, onClose, onSubmit }: CreateAgentSessionDialogProps) {
   const [instructions, setInstructions] = useState('');
   const [selectedRepo, setSelectedRepo] = useState(REPOS[0]);
   const [selectedBranch, setSelectedBranch] = useState(BRANCHES[0]);
-  const [selectedAgent, setSelectedAgent] = useState(AGENTS[1]); // Default to Claude
+  const [selectedAgent, setSelectedAgent] = useState(getInitialAgent);
 
   const handleClose = useCallback(() => {
     setInstructions('');
     setSelectedRepo(REPOS[0]);
     setSelectedBranch(BRANCHES[0]);
-    setSelectedAgent(AGENTS[1]);
+    const defaultAgentObj = defaultAgent ? getAgentById(defaultAgent) : null;
+    setSelectedAgent(defaultAgentObj || AGENTS[1]);
     onClose();
-  }, [onClose]);
+  }, [onClose, defaultAgent]);
 
   const handleSubmit = () => {
     onSubmit?.({

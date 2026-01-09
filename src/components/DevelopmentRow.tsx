@@ -272,11 +272,7 @@ export function DevelopmentRow({ issueId }: DevelopmentRowProps) {
       </AnchoredOverlay>
 
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {linkedItems.length === 0 ? (
-          <div style={{ padding: '0', color: 'var(--fgColor-muted)', fontSize: '12px' }}>
-            No branches or pull requests
-          </div>
-        ) : (
+        {linkedItems.length > 0 && (
           linkedItems.map(item => renderDevelopmentItem(item))
         )}
       </div>

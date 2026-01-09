@@ -101,3 +101,25 @@
   animation: slideOut 0.2s ease-in both;
 }
 
+.publicFieldLabel {
+  font-size: var(--text-body-size-small, 12px);
+  /* font-weight: var(--base-text-weight-medium, 600); */
+  color: var(--fgColor-muted);
+  padding-left: 8px;
+  padding-top: 8px;
+  padding-bottom: 4px;
+  gap: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.publicFieldGroup {
+  
+  border-radius: var(--borderRadius-medium, 6px);
+   margin-top: 4px;
+   /* background-color: var(--bgColor-muted, #f6f8fa); */
+   &:hover {
+    background-color: var(--bgColor-muted, #f6f8fa);
+   }
+}
+

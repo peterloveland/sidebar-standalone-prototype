@@ -27,7 +27,12 @@
 }
 
 .containerActive {
-  background-color: var(--bgColor-muted, #f6f8fa);
+  background-color: var(--control-bgColor-active, #e0e0e0);
+}
+
+.containerWithFooter {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .containerActiveText, .containerActiveDate {
@@ -37,6 +42,7 @@
     padding-right: 3px;
     padding-left: 3px;
     display: flex;
+    flex-direction: column;
      }
 }
 
@@ -48,10 +54,10 @@
 }
 
 .label {
-  color: var(--fgColor-muted, #656d76);
+  color: var(--fgColor-default);
   font-family: var(--fontStack-sansSerif, "SF Pro Text");
   font-size: var(--text-body-size-small, 12px);
-  font-weight: var(--base-text-weight-normal, 400);
+  font-weight: var(--base-text-weight-medium, 500);
   line-height: 16px;
   flex-shrink: 0;
   width: 30%;

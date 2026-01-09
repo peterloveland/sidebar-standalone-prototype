@@ -505,11 +505,7 @@ export function RelationshipsRow({ issueId }: RelationshipsRowProps) {
       </AnchoredOverlay>
 
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {!hasRelationships ? (
-          <div style={{ padding: '0', color: 'var(--fgColor-muted)', fontSize: '12px' }}>
-            No relationships
-          </div>
-        ) : (
+        {hasRelationships && (
           <>
             {relationships.parent && (
               <div style={{ marginBottom: '4px' }}>
